@@ -1,22 +1,41 @@
 openapi: 3.1.0
 info:
-  # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: CareOps AI - Inspection Readiness Platform API
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: dashboard
+    description: Master dashboard and readiness scores
+  - name: alerts
+    description: Critical alert engine
+  - name: children
+    description: Children and young people management
+  - name: staff
+    description: Workforce and staff management
+  - name: safeguarding
+    description: Safeguarding events and concerns
+  - name: training
+    description: Training and supervision records
+  - name: regulation
+    description: Regulation 44 and 45 tracking
+  - name: governance
+    description: Governance, complaints, and notifications
+  - name: incidents
+    description: Incident recording and management
+  - name: inspection
+    description: Inspection mode and pack generation
+
 paths:
   /healthz:
     get:
       operationId: healthCheck
       tags: [health]
       summary: Health check
-      description: Returns server health status
       responses:
         "200":
           description: Healthy
@@ -24,6 +43,1005 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  # ── DASHBOARD ──────────────────────────────────────────────────────────────
+  /dashboard/summary:
+    get:
+      operationId: getDashboardSummary
+      tags: [dashboard]
+      summary: Get overall inspection readiness summary
+      responses:
+        "200":
+          description: Dashboard summary with domain scores
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DashboardSummary"
+
+  /dashboard/activity:
+    get:
+      operationId: getRecentActivity
+      tags: [dashboard]
+      summary: Get recent activity feed
+      responses:
+        "200":
+          description: List of recent activity items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ActivityItem"
+
+  # ── ALERTS ─────────────────────────────────────────────────────────────────
+  /alerts:
+    get:
+      operationId: getAlerts
+      tags: [alerts]
+      summary: List all active alerts
+      parameters:
+        - name: severity
+          in: query
+          schema:
+            type: string
+            enum: [critical, high, medium, low]
+        - name: domain
+          in: query
+          schema:
+            type: string
+        - name: resolved
+          in: query
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: List of alerts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Alert"
+
+  /alerts/{id}:
+    get:
+      operationId: getAlert
+      tags: [alerts]
+      summary: Get alert detail
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Alert detail
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Alert"
+        "404":
+          description: Not found
+
+    patch:
+      operationId: updateAlert
+      tags: [alerts]
+      summary: Update alert (resolve, assign, add note)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AlertUpdate"
+      responses:
+        "200":
+          description: Updated alert
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Alert"
+
+  /alerts/counts:
+    get:
+      operationId: getAlertCounts
+      tags: [alerts]
+      summary: Get alert counts by severity and domain
+      responses:
+        "200":
+          description: Alert count summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AlertCounts"
+
+  # ── CHILDREN ───────────────────────────────────────────────────────────────
+  /children:
+    get:
+      operationId: listChildren
+      tags: [children]
+      summary: List all young people in the home
+      responses:
+        "200":
+          description: List of children
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Child"
+    post:
+      operationId: createChild
+      tags: [children]
+      summary: Add a new young person
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChildInput"
+      responses:
+        "201":
+          description: Created child
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Child"
+
+  /children/{id}:
+    get:
+      operationId: getChild
+      tags: [children]
+      summary: Get young person detail
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Child detail
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Child"
+        "404":
+          description: Not found
+
+    patch:
+      operationId: updateChild
+      tags: [children]
+      summary: Update young person record
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChildUpdate"
+      responses:
+        "200":
+          description: Updated child
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Child"
+
+  /children/{id}/outcomes:
+    get:
+      operationId: getChildOutcomes
+      tags: [children]
+      summary: Get outcome tracking for a young person
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Child outcomes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Outcome"
+    post:
+      operationId: createOutcome
+      tags: [children]
+      summary: Record an outcome update
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OutcomeInput"
+      responses:
+        "201":
+          description: Created outcome
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Outcome"
+
+  /children/{id}/voice:
+    get:
+      operationId: getChildVoice
+      tags: [children]
+      summary: Get child voice evidence for a young person
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Child voice records
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ChildVoice"
+    post:
+      operationId: createChildVoiceRecord
+      tags: [children]
+      summary: Record a child voice entry
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChildVoiceInput"
+      responses:
+        "201":
+          description: Created child voice record
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChildVoice"
+
+  /children/outcomes/summary:
+    get:
+      operationId: getOutcomesSummary
+      tags: [children]
+      summary: Get aggregated outcomes summary across all children
+      responses:
+        "200":
+          description: Outcomes summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OutcomesSummary"
+
+  # ── STAFF ──────────────────────────────────────────────────────────────────
+  /staff:
+    get:
+      operationId: listStaff
+      tags: [staff]
+      summary: List all staff members
+      responses:
+        "200":
+          description: Staff list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/StaffMember"
+    post:
+      operationId: createStaffMember
+      tags: [staff]
+      summary: Add a new staff member
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StaffInput"
+      responses:
+        "201":
+          description: Created staff member
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StaffMember"
+
+  /staff/{id}:
+    get:
+      operationId: getStaffMember
+      tags: [staff]
+      summary: Get staff member detail
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Staff member detail
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StaffMember"
+        "404":
+          description: Not found
+
+    patch:
+      operationId: updateStaffMember
+      tags: [staff]
+      summary: Update staff member record
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StaffUpdate"
+      responses:
+        "200":
+          description: Updated staff member
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StaffMember"
+
+  /staff/compliance/summary:
+    get:
+      operationId: getWorkforceComplianceSummary
+      tags: [staff]
+      summary: Get workforce compliance overview
+      responses:
+        "200":
+          description: Compliance summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WorkforceComplianceSummary"
+
+  # ── TRAINING & SUPERVISIONS ────────────────────────────────────────────────
+  /training:
+    get:
+      operationId: listTraining
+      tags: [training]
+      summary: List all training records
+      parameters:
+        - name: staffId
+          in: query
+          schema:
+            type: integer
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [current, expiring_soon, expired]
+      responses:
+        "200":
+          description: Training records
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TrainingRecord"
+    post:
+      operationId: createTrainingRecord
+      tags: [training]
+      summary: Record a training completion
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TrainingInput"
+      responses:
+        "201":
+          description: Created training record
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TrainingRecord"
+
+  /training/{id}:
+    patch:
+      operationId: updateTrainingRecord
+      tags: [training]
+      summary: Update a training record
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TrainingUpdate"
+      responses:
+        "200":
+          description: Updated training record
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TrainingRecord"
+
+  /supervisions:
+    get:
+      operationId: listSupervisions
+      tags: [training]
+      summary: List all supervision records
+      parameters:
+        - name: staffId
+          in: query
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Supervision records
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Supervision"
+    post:
+      operationId: createSupervision
+      tags: [training]
+      summary: Record a supervision session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SupervisionInput"
+      responses:
+        "201":
+          description: Created supervision
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Supervision"
+
+  /training/compliance/summary:
+    get:
+      operationId: getTrainingComplianceSummary
+      tags: [training]
+      summary: Get training and supervision compliance summary
+      responses:
+        "200":
+          description: Training compliance summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TrainingComplianceSummary"
+
+  # ── SAFEGUARDING ───────────────────────────────────────────────────────────
+  /safeguarding:
+    get:
+      operationId: listSafeguardingEvents
+      tags: [safeguarding]
+      summary: List all safeguarding events
+      parameters:
+        - name: childId
+          in: query
+          schema:
+            type: integer
+        - name: type
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Safeguarding events
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SafeguardingEvent"
+    post:
+      operationId: createSafeguardingEvent
+      tags: [safeguarding]
+      summary: Record a safeguarding event
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SafeguardingEventInput"
+      responses:
+        "201":
+          description: Created safeguarding event
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SafeguardingEvent"
+
+  /safeguarding/{id}:
+    get:
+      operationId: getSafeguardingEvent
+      tags: [safeguarding]
+      summary: Get safeguarding event detail
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Safeguarding event detail
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SafeguardingEvent"
+        "404":
+          description: Not found
+
+    patch:
+      operationId: updateSafeguardingEvent
+      tags: [safeguarding]
+      summary: Update a safeguarding event
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SafeguardingEventUpdate"
+      responses:
+        "200":
+          description: Updated safeguarding event
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SafeguardingEvent"
+
+  /safeguarding/missing-episodes:
+    get:
+      operationId: listMissingEpisodes
+      tags: [safeguarding]
+      summary: List missing episodes
+      parameters:
+        - name: childId
+          in: query
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Missing episodes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MissingEpisode"
+    post:
+      operationId: createMissingEpisode
+      tags: [safeguarding]
+      summary: Record a missing episode
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MissingEpisodeInput"
+      responses:
+        "201":
+          description: Created missing episode
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MissingEpisode"
+
+  # ── INCIDENTS ──────────────────────────────────────────────────────────────
+  /incidents:
+    get:
+      operationId: listIncidents
+      tags: [incidents]
+      summary: List all incidents
+      parameters:
+        - name: childId
+          in: query
+          schema:
+            type: integer
+        - name: requiresNotification
+          in: query
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: Incident list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Incident"
+    post:
+      operationId: createIncident
+      tags: [incidents]
+      summary: Record an incident
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/IncidentInput"
+      responses:
+        "201":
+          description: Created incident with notification assessment
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Incident"
+
+  /incidents/{id}:
+    get:
+      operationId: getIncident
+      tags: [incidents]
+      summary: Get incident detail
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Incident detail
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Incident"
+        "404":
+          description: Not found
+
+    patch:
+      operationId: updateIncident
+      tags: [incidents]
+      summary: Update an incident record
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/IncidentUpdate"
+      responses:
+        "200":
+          description: Updated incident
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Incident"
+
+  # ── REGULATION 44 / 45 ─────────────────────────────────────────────────────
+  /regulation44:
+    get:
+      operationId: listRegulation44
+      tags: [regulation]
+      summary: List Regulation 44 visits and actions
+      responses:
+        "200":
+          description: Regulation 44 visits
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Regulation44Visit"
+    post:
+      operationId: createRegulation44Visit
+      tags: [regulation]
+      summary: Record a Regulation 44 visit
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Regulation44Input"
+      responses:
+        "201":
+          description: Created Regulation 44 visit
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Regulation44Visit"
+
+  /regulation44/{id}:
+    patch:
+      operationId: updateRegulation44Visit
+      tags: [regulation]
+      summary: Update Regulation 44 visit or actions
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Regulation44Update"
+      responses:
+        "200":
+          description: Updated visit
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Regulation44Visit"
+
+  /regulation45:
+    get:
+      operationId: listRegulation45
+      tags: [regulation]
+      summary: List Regulation 45 reviews
+      responses:
+        "200":
+          description: Regulation 45 reviews
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Regulation45Review"
+    post:
+      operationId: createRegulation45Review
+      tags: [regulation]
+      summary: Record a Regulation 45 review
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Regulation45Input"
+      responses:
+        "201":
+          description: Created Regulation 45 review
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Regulation45Review"
+
+  /regulation/actions:
+    get:
+      operationId: listOutstandingActions
+      tags: [regulation]
+      summary: List all outstanding regulation actions
+      responses:
+        "200":
+          description: Outstanding actions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/RegulationAction"
+
+  # ── GOVERNANCE ─────────────────────────────────────────────────────────────
+  /governance/complaints:
+    get:
+      operationId: listComplaints
+      tags: [governance]
+      summary: List complaints and compliments
+      responses:
+        "200":
+          description: Complaints and compliments list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Complaint"
+    post:
+      operationId: createComplaint
+      tags: [governance]
+      summary: Record a complaint or compliment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ComplaintInput"
+      responses:
+        "201":
+          description: Created complaint/compliment
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Complaint"
+
+  /governance/complaints/{id}:
+    patch:
+      operationId: updateComplaint
+      tags: [governance]
+      summary: Update a complaint record
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ComplaintUpdate"
+      responses:
+        "200":
+          description: Updated complaint
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Complaint"
+
+  /governance/notifications:
+    get:
+      operationId: listNotifications
+      tags: [governance]
+      summary: List Ofsted notifications
+      responses:
+        "200":
+          description: Notifications list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/OfstedNotification"
+    post:
+      operationId: createNotification
+      tags: [governance]
+      summary: Record an Ofsted notification
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NotificationInput"
+      responses:
+        "201":
+          description: Created notification
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OfstedNotification"
+
+  /governance/policies:
+    get:
+      operationId: listPolicies
+      tags: [governance]
+      summary: List policies and key documents
+      responses:
+        "200":
+          description: Policies list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Policy"
+    post:
+      operationId: createPolicy
+      tags: [governance]
+      summary: Add a policy record
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PolicyInput"
+      responses:
+        "201":
+          description: Created policy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Policy"
+
+  /governance/summary:
+    get:
+      operationId: getGovernanceSummary
+      tags: [governance]
+      summary: Get governance domain summary
+      responses:
+        "200":
+          description: Governance summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GovernanceSummary"
+
+  # ── INSPECTION MODE ────────────────────────────────────────────────────────
+  /inspection/pack:
+    get:
+      operationId: getInspectionPack
+      tags: [inspection]
+      summary: Generate inspection readiness pack
+      responses:
+        "200":
+          description: Full inspection pack
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InspectionPack"
+
+  /inspection/annex-a:
+    get:
+      operationId: getAnnexA
+      tags: [inspection]
+      summary: Generate Annex A data
+      responses:
+        "200":
+          description: Annex A data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AnnexA"
+
+  /inspection/evidence-gaps:
+    get:
+      operationId: getEvidenceGaps
+      tags: [inspection]
+      summary: Get current evidence gaps analysis
+      responses:
+        "200":
+          description: Evidence gaps
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/EvidenceGap"
+
 components:
   schemas:
     HealthStatus:
@@ -31,6 +1049,1107 @@ components:
       properties:
         status:
           type: string
-      required:
-        - status
+      required: [status]
 
+    # ── DASHBOARD ────────────────────────────────────────────────────────────
+    DomainScore:
+      type: object
+      required: [domain, score, label, trend, alertCount]
+      properties:
+        domain:
+          type: string
+        label:
+          type: string
+        score:
+          type: integer
+        trend:
+          type: string
+          enum: [up, down, stable]
+        alertCount:
+          type: integer
+        riskLevel:
+          type: string
+          enum: [low, medium, high, critical]
+
+    DashboardSummary:
+      type: object
+      required: [overallScore, domains, criticalAlerts, overdueActions, lastUpdated]
+      properties:
+        overallScore:
+          type: integer
+        domains:
+          type: array
+          items:
+            $ref: "#/components/schemas/DomainScore"
+        criticalAlerts:
+          type: integer
+        overdueActions:
+          type: integer
+        totalChildren:
+          type: integer
+        totalStaff:
+          type: integer
+        lastUpdated:
+          type: string
+
+    ActivityItem:
+      type: object
+      required: [id, type, description, timestamp, domain]
+      properties:
+        id:
+          type: integer
+        type:
+          type: string
+        description:
+          type: string
+        timestamp:
+          type: string
+        domain:
+          type: string
+        severity:
+          type: ["string", "null"]
+          enum: [critical, high, medium, low, null]
+        relatedEntityType:
+          type: ["string", "null"]
+        relatedEntityId:
+          type: ["integer", "null"]
+
+    # ── ALERTS ───────────────────────────────────────────────────────────────
+    Alert:
+      type: object
+      required: [id, title, description, severity, domain, riskExplanation, regulatoryImpact, recommendedAction, status, createdAt]
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+        severity:
+          type: string
+          enum: [critical, high, medium, low]
+        domain:
+          type: string
+        riskExplanation:
+          type: string
+        regulatoryImpact:
+          type: string
+        recommendedAction:
+          type: string
+        assignedTo:
+          type: ["string", "null"]
+        status:
+          type: string
+          enum: [active, in_progress, resolved]
+        resolvedAt:
+          type: ["string", "null"]
+        notes:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+        dueDate:
+          type: ["string", "null"]
+        relatedEntityType:
+          type: ["string", "null"]
+        relatedEntityId:
+          type: ["integer", "null"]
+
+    AlertUpdate:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [active, in_progress, resolved]
+        assignedTo:
+          type: string
+        notes:
+          type: string
+        dueDate:
+          type: string
+
+    AlertCounts:
+      type: object
+      required: [total, bySeverity, byDomain]
+      properties:
+        total:
+          type: integer
+        bySeverity:
+          type: object
+          properties:
+            critical:
+              type: integer
+            high:
+              type: integer
+            medium:
+              type: integer
+            low:
+              type: integer
+        byDomain:
+          type: array
+          items:
+            type: object
+            required: [domain, count]
+            properties:
+              domain:
+                type: string
+              count:
+                type: integer
+
+    # ── CHILDREN ─────────────────────────────────────────────────────────────
+    Child:
+      type: object
+      required: [id, firstName, lastName, dateOfBirth, admissionDate, status, keyWorker]
+      properties:
+        id:
+          type: integer
+        firstName:
+          type: string
+        lastName:
+          type: string
+        dateOfBirth:
+          type: string
+        admissionDate:
+          type: string
+        status:
+          type: string
+          enum: [current, discharged, planned_discharge]
+        keyWorker:
+          type: string
+        placingAuthority:
+          type: ["string", "null"]
+        localAuthority:
+          type: ["string", "null"]
+        childVoiceScore:
+          type: ["integer", "null"]
+        lastChildVoiceDate:
+          type: ["string", "null"]
+        lastKeyWorkDate:
+          type: ["string", "null"]
+        riskLevel:
+          type: ["string", "null"]
+          enum: [low, medium, high, critical, null]
+        notes:
+          type: ["string", "null"]
+
+    ChildInput:
+      type: object
+      required: [firstName, lastName, dateOfBirth, admissionDate, keyWorker]
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        dateOfBirth:
+          type: string
+        admissionDate:
+          type: string
+        keyWorker:
+          type: string
+        placingAuthority:
+          type: string
+        localAuthority:
+          type: string
+        status:
+          type: string
+          enum: [current, discharged, planned_discharge]
+        notes:
+          type: string
+
+    ChildUpdate:
+      type: object
+      properties:
+        keyWorker:
+          type: string
+        status:
+          type: string
+          enum: [current, discharged, planned_discharge]
+        placingAuthority:
+          type: string
+        localAuthority:
+          type: string
+        notes:
+          type: string
+
+    Outcome:
+      type: object
+      required: [id, childId, area, currentStatus, baseline, lastUpdated]
+      properties:
+        id:
+          type: integer
+        childId:
+          type: integer
+        area:
+          type: string
+          enum: [education, health, relationships, independence, employment, community]
+        currentStatus:
+          type: string
+        baseline:
+          type: string
+        progress:
+          type: string
+          enum: [improving, stable, declining, not_assessed]
+        evidence:
+          type: ["string", "null"]
+        nextActions:
+          type: ["string", "null"]
+        lastUpdated:
+          type: string
+
+    OutcomeInput:
+      type: object
+      required: [area, currentStatus, baseline]
+      properties:
+        area:
+          type: string
+          enum: [education, health, relationships, independence, employment, community]
+        currentStatus:
+          type: string
+        baseline:
+          type: string
+        progress:
+          type: string
+          enum: [improving, stable, declining, not_assessed]
+        evidence:
+          type: string
+        nextActions:
+          type: string
+
+    OutcomesSummary:
+      type: object
+      required: [byArea, overallProgress]
+      properties:
+        byArea:
+          type: array
+          items:
+            type: object
+            required: [area, improving, stable, declining, notAssessed]
+            properties:
+              area:
+                type: string
+              improving:
+                type: integer
+              stable:
+                type: integer
+              declining:
+                type: integer
+              notAssessed:
+                type: integer
+        overallProgress:
+          type: string
+
+    ChildVoice:
+      type: object
+      required: [id, childId, type, date, summary, quality]
+      properties:
+        id:
+          type: integer
+        childId:
+          type: integer
+        type:
+          type: string
+          enum: [house_meeting, complaint, feedback, direct_work, key_work, survey, wishes_and_feelings]
+        date:
+          type: string
+        summary:
+          type: string
+        quality:
+          type: string
+          enum: [strong, adequate, weak]
+        recordedBy:
+          type: ["string", "null"]
+
+    ChildVoiceInput:
+      type: object
+      required: [type, date, summary, quality]
+      properties:
+        type:
+          type: string
+          enum: [house_meeting, complaint, feedback, direct_work, key_work, survey, wishes_and_feelings]
+        date:
+          type: string
+        summary:
+          type: string
+        quality:
+          type: string
+          enum: [strong, adequate, weak]
+        recordedBy:
+          type: string
+
+    # ── STAFF ────────────────────────────────────────────────────────────────
+    StaffMember:
+      type: object
+      required: [id, firstName, lastName, role, startDate, dbsStatus, dbsExpiryDate, rightToWork, complianceScore]
+      properties:
+        id:
+          type: integer
+        firstName:
+          type: string
+        lastName:
+          type: string
+        role:
+          type: string
+        startDate:
+          type: string
+        dbsStatus:
+          type: string
+          enum: [valid, expiring_soon, expired, pending]
+        dbsExpiryDate:
+          type: string
+        rightToWork:
+          type: boolean
+        qualifications:
+          type: ["string", "null"]
+        mandatoryTrainingComplete:
+          type: boolean
+        lastSupervisionDate:
+          type: ["string", "null"]
+        lastAppraisalDate:
+          type: ["string", "null"]
+        complianceScore:
+          type: integer
+        status:
+          type: string
+          enum: [active, on_leave, left]
+
+    StaffInput:
+      type: object
+      required: [firstName, lastName, role, startDate, dbsExpiryDate, rightToWork]
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        role:
+          type: string
+        startDate:
+          type: string
+        dbsExpiryDate:
+          type: string
+        rightToWork:
+          type: boolean
+        qualifications:
+          type: string
+        status:
+          type: string
+          enum: [active, on_leave, left]
+
+    StaffUpdate:
+      type: object
+      properties:
+        role:
+          type: string
+        dbsExpiryDate:
+          type: string
+        rightToWork:
+          type: boolean
+        qualifications:
+          type: string
+        status:
+          type: string
+          enum: [active, on_leave, left]
+        mandatoryTrainingComplete:
+          type: boolean
+
+    WorkforceComplianceSummary:
+      type: object
+      required: [overallScore, dbsCompliant, dbsExpiringSoon, dbsExpired, trainingCompliant, supervisionOverdue, appraisalOverdue]
+      properties:
+        overallScore:
+          type: integer
+        dbsCompliant:
+          type: integer
+        dbsExpiringSoon:
+          type: integer
+        dbsExpired:
+          type: integer
+        trainingCompliant:
+          type: integer
+        supervisionOverdue:
+          type: integer
+        appraisalOverdue:
+          type: integer
+        totalStaff:
+          type: integer
+
+    # ── TRAINING ─────────────────────────────────────────────────────────────
+    TrainingRecord:
+      type: object
+      required: [id, staffId, staffName, trainingType, category, completedDate, expiryDate, status]
+      properties:
+        id:
+          type: integer
+        staffId:
+          type: integer
+        staffName:
+          type: string
+        trainingType:
+          type: string
+        category:
+          type: string
+          enum: [mandatory, specialist, refresher]
+        completedDate:
+          type: string
+        expiryDate:
+          type: string
+        status:
+          type: string
+          enum: [current, expiring_soon, expired]
+        notes:
+          type: ["string", "null"]
+
+    TrainingInput:
+      type: object
+      required: [staffId, trainingType, category, completedDate, expiryDate]
+      properties:
+        staffId:
+          type: integer
+        trainingType:
+          type: string
+        category:
+          type: string
+          enum: [mandatory, specialist, refresher]
+        completedDate:
+          type: string
+        expiryDate:
+          type: string
+        notes:
+          type: string
+
+    TrainingUpdate:
+      type: object
+      properties:
+        completedDate:
+          type: string
+        expiryDate:
+          type: string
+        notes:
+          type: string
+
+    Supervision:
+      type: object
+      required: [id, staffId, staffName, supervisorName, date, type, nextDueDate]
+      properties:
+        id:
+          type: integer
+        staffId:
+          type: integer
+        staffName:
+          type: string
+        supervisorName:
+          type: string
+        date:
+          type: string
+        type:
+          type: string
+          enum: [supervision, appraisal, probation_review]
+        notes:
+          type: ["string", "null"]
+        actionPoints:
+          type: ["string", "null"]
+        nextDueDate:
+          type: string
+
+    SupervisionInput:
+      type: object
+      required: [staffId, supervisorName, date, type, nextDueDate]
+      properties:
+        staffId:
+          type: integer
+        supervisorName:
+          type: string
+        date:
+          type: string
+        type:
+          type: string
+          enum: [supervision, appraisal, probation_review]
+        notes:
+          type: string
+        actionPoints:
+          type: string
+        nextDueDate:
+          type: string
+
+    TrainingComplianceSummary:
+      type: object
+      required: [mandatoryCompliant, mandatoryExpiringSoon, mandatoryExpired, supervisionsDue, appraisalsDue]
+      properties:
+        mandatoryCompliant:
+          type: integer
+        mandatoryExpiringSoon:
+          type: integer
+        mandatoryExpired:
+          type: integer
+        supervisionsDue:
+          type: integer
+        appraisalsDue:
+          type: integer
+
+    # ── SAFEGUARDING ─────────────────────────────────────────────────────────
+    SafeguardingEvent:
+      type: object
+      required: [id, childId, type, date, description, riskLevel, status, reportedBy]
+      properties:
+        id:
+          type: integer
+        childId:
+          type: integer
+        childName:
+          type: ["string", "null"]
+        type:
+          type: string
+          enum: [missing_episode, child_protection, exploitation, self_harm, return_interview, risk_assessment_review, other]
+        date:
+          type: string
+        description:
+          type: string
+        riskLevel:
+          type: string
+          enum: [low, medium, high, critical]
+        status:
+          type: string
+          enum: [open, actioned, closed, escalated]
+        reportedBy:
+          type: string
+        actionTaken:
+          type: ["string", "null"]
+        notificationRequired:
+          type: boolean
+        notificationSent:
+          type: boolean
+        closedAt:
+          type: ["string", "null"]
+
+    SafeguardingEventInput:
+      type: object
+      required: [childId, type, date, description, riskLevel, reportedBy]
+      properties:
+        childId:
+          type: integer
+        type:
+          type: string
+          enum: [missing_episode, child_protection, exploitation, self_harm, return_interview, risk_assessment_review, other]
+        date:
+          type: string
+        description:
+          type: string
+        riskLevel:
+          type: string
+          enum: [low, medium, high, critical]
+        reportedBy:
+          type: string
+        actionTaken:
+          type: string
+
+    SafeguardingEventUpdate:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [open, actioned, closed, escalated]
+        actionTaken:
+          type: string
+        riskLevel:
+          type: string
+          enum: [low, medium, high, critical]
+        notificationSent:
+          type: boolean
+
+    MissingEpisode:
+      type: object
+      required: [id, childId, missingFrom, returnedAt, returnInterviewCompleted, reportedToPolice]
+      properties:
+        id:
+          type: integer
+        childId:
+          type: integer
+        childName:
+          type: ["string", "null"]
+        missingFrom:
+          type: string
+        returnedAt:
+          type: ["string", "null"]
+        returnInterviewCompleted:
+          type: boolean
+        returnInterviewDate:
+          type: ["string", "null"]
+        reportedToPolice:
+          type: boolean
+        policeRef:
+          type: ["string", "null"]
+        circumstances:
+          type: ["string", "null"]
+        riskLevel:
+          type: string
+          enum: [low, medium, high, critical]
+
+    MissingEpisodeInput:
+      type: object
+      required: [childId, missingFrom, reportedToPolice, riskLevel]
+      properties:
+        childId:
+          type: integer
+        missingFrom:
+          type: string
+        reportedToPolice:
+          type: boolean
+        policeRef:
+          type: string
+        circumstances:
+          type: string
+        riskLevel:
+          type: string
+          enum: [low, medium, high, critical]
+
+    # ── INCIDENTS ────────────────────────────────────────────────────────────
+    Incident:
+      type: object
+      required: [id, title, date, type, severity, childId, recordedBy, notificationRequired, status]
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        date:
+          type: string
+        type:
+          type: string
+          enum: [physical_altercation, property_damage, absconding, self_harm, substance_misuse, mental_health_crisis, other]
+        severity:
+          type: string
+          enum: [minor, moderate, serious, critical]
+        childId:
+          type: ["integer", "null"]
+        childName:
+          type: ["string", "null"]
+        description:
+          type: string
+        recordedBy:
+          type: string
+        notificationRequired:
+          type: boolean
+        notificationReason:
+          type: ["string", "null"]
+        notificationSuggestedWording:
+          type: ["string", "null"]
+        notificationSent:
+          type: boolean
+        riskAssessmentUpdated:
+          type: boolean
+        status:
+          type: string
+          enum: [open, under_review, closed]
+        followUpActions:
+          type: ["string", "null"]
+
+    IncidentInput:
+      type: object
+      required: [title, date, type, severity, recordedBy, description]
+      properties:
+        title:
+          type: string
+        date:
+          type: string
+        type:
+          type: string
+          enum: [physical_altercation, property_damage, absconding, self_harm, substance_misuse, mental_health_crisis, other]
+        severity:
+          type: string
+          enum: [minor, moderate, serious, critical]
+        childId:
+          type: integer
+        description:
+          type: string
+        recordedBy:
+          type: string
+        followUpActions:
+          type: string
+
+    IncidentUpdate:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [open, under_review, closed]
+        notificationSent:
+          type: boolean
+        riskAssessmentUpdated:
+          type: boolean
+        followUpActions:
+          type: string
+
+    # ── REGULATION ───────────────────────────────────────────────────────────
+    Regulation44Visit:
+      type: object
+      required: [id, visitDate, conductedBy, summary, actions, overallFinding, nextDueDate]
+      properties:
+        id:
+          type: integer
+        visitDate:
+          type: string
+        conductedBy:
+          type: string
+        summary:
+          type: string
+        overallFinding:
+          type: string
+          enum: [satisfactory, requires_improvement, inadequate]
+        actions:
+          type: array
+          items:
+            $ref: "#/components/schemas/RegulationAction"
+        nextDueDate:
+          type: string
+        reportUploaded:
+          type: boolean
+
+    Regulation44Input:
+      type: object
+      required: [visitDate, conductedBy, summary, overallFinding, nextDueDate]
+      properties:
+        visitDate:
+          type: string
+        conductedBy:
+          type: string
+        summary:
+          type: string
+        overallFinding:
+          type: string
+          enum: [satisfactory, requires_improvement, inadequate]
+        nextDueDate:
+          type: string
+        reportUploaded:
+          type: boolean
+
+    Regulation44Update:
+      type: object
+      properties:
+        summary:
+          type: string
+        overallFinding:
+          type: string
+          enum: [satisfactory, requires_improvement, inadequate]
+        reportUploaded:
+          type: boolean
+
+    Regulation45Review:
+      type: object
+      required: [id, reviewDate, completedBy, period, summary, qualityRating]
+      properties:
+        id:
+          type: integer
+        reviewDate:
+          type: string
+        completedBy:
+          type: string
+        period:
+          type: string
+        summary:
+          type: string
+        qualityRating:
+          type: string
+          enum: [outstanding, good, requires_improvement, inadequate]
+        actionsRaised:
+          type: integer
+        reportUploaded:
+          type: boolean
+
+    Regulation45Input:
+      type: object
+      required: [reviewDate, completedBy, period, summary, qualityRating]
+      properties:
+        reviewDate:
+          type: string
+        completedBy:
+          type: string
+        period:
+          type: string
+        summary:
+          type: string
+        qualityRating:
+          type: string
+          enum: [outstanding, good, requires_improvement, inadequate]
+        actionsRaised:
+          type: integer
+        reportUploaded:
+          type: boolean
+
+    RegulationAction:
+      type: object
+      required: [id, title, dueDate, status, assignedTo, source]
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: ["string", "null"]
+        dueDate:
+          type: string
+        status:
+          type: string
+          enum: [outstanding, in_progress, completed, escalated]
+        assignedTo:
+          type: string
+        source:
+          type: string
+          enum: [reg44, reg45, internal_audit, ofsted]
+        evidenceUploaded:
+          type: boolean
+        completedAt:
+          type: ["string", "null"]
+
+    # ── GOVERNANCE ───────────────────────────────────────────────────────────
+    Complaint:
+      type: object
+      required: [id, type, date, description, raisedBy, status]
+      properties:
+        id:
+          type: integer
+        type:
+          type: string
+          enum: [complaint, compliment, concern]
+        date:
+          type: string
+        description:
+          type: string
+        raisedBy:
+          type: string
+        assignedTo:
+          type: ["string", "null"]
+        status:
+          type: string
+          enum: [open, under_investigation, resolved, escalated]
+        resolution:
+          type: ["string", "null"]
+        resolvedAt:
+          type: ["string", "null"]
+        linkedChildId:
+          type: ["integer", "null"]
+
+    ComplaintInput:
+      type: object
+      required: [type, date, description, raisedBy]
+      properties:
+        type:
+          type: string
+          enum: [complaint, compliment, concern]
+        date:
+          type: string
+        description:
+          type: string
+        raisedBy:
+          type: string
+        linkedChildId:
+          type: integer
+
+    ComplaintUpdate:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [open, under_investigation, resolved, escalated]
+        assignedTo:
+          type: string
+        resolution:
+          type: string
+
+    OfstedNotification:
+      type: object
+      required: [id, type, date, description, notificationRequired, sent]
+      properties:
+        id:
+          type: integer
+        type:
+          type: string
+          enum: [serious_incident, missing_episode, safeguarding_concern, placement_change, manager_change, other]
+        date:
+          type: string
+        description:
+          type: string
+        notificationRequired:
+          type: boolean
+        notificationReason:
+          type: ["string", "null"]
+        suggestedWording:
+          type: ["string", "null"]
+        sent:
+          type: boolean
+        sentAt:
+          type: ["string", "null"]
+        reference:
+          type: ["string", "null"]
+
+    NotificationInput:
+      type: object
+      required: [type, date, description, notificationRequired]
+      properties:
+        type:
+          type: string
+          enum: [serious_incident, missing_episode, safeguarding_concern, placement_change, manager_change, other]
+        date:
+          type: string
+        description:
+          type: string
+        notificationRequired:
+          type: boolean
+        notificationReason:
+          type: string
+        suggestedWording:
+          type: string
+
+    Policy:
+      type: object
+      required: [id, title, category, version, lastReviewedDate, nextReviewDate, status]
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        category:
+          type: string
+          enum: [safeguarding, health_safety, behaviour_management, statement_of_purpose, staffing, medication, other]
+        version:
+          type: string
+        lastReviewedDate:
+          type: string
+        nextReviewDate:
+          type: string
+        status:
+          type: string
+          enum: [current, due_for_review, overdue]
+        owner:
+          type: ["string", "null"]
+
+    PolicyInput:
+      type: object
+      required: [title, category, version, lastReviewedDate, nextReviewDate]
+      properties:
+        title:
+          type: string
+        category:
+          type: string
+          enum: [safeguarding, health_safety, behaviour_management, statement_of_purpose, staffing, medication, other]
+        version:
+          type: string
+        lastReviewedDate:
+          type: string
+        nextReviewDate:
+          type: string
+        owner:
+          type: string
+
+    GovernanceSummary:
+      type: object
+      required: [openComplaints, pendingNotifications, policiesOverdue, policiesDueSoon, overallScore]
+      properties:
+        openComplaints:
+          type: integer
+        pendingNotifications:
+          type: integer
+        policiesOverdue:
+          type: integer
+        policiesDueSoon:
+          type: integer
+        overallScore:
+          type: integer
+
+    # ── INSPECTION ───────────────────────────────────────────────────────────
+    InspectionPack:
+      type: object
+      required: [generatedAt, overallScore, domains, annex, workforce, safeguarding, complaints, childOutcomes, actionPlan, riskSummary]
+      properties:
+        generatedAt:
+          type: string
+        overallScore:
+          type: integer
+        domains:
+          type: array
+          items:
+            $ref: "#/components/schemas/DomainScore"
+        annex:
+          $ref: "#/components/schemas/AnnexA"
+        workforce:
+          $ref: "#/components/schemas/WorkforceComplianceSummary"
+        safeguarding:
+          type: object
+          properties:
+            totalEvents:
+              type: integer
+            openEvents:
+              type: integer
+            missingEpisodes:
+              type: integer
+        complaints:
+          type: object
+          properties:
+            total:
+              type: integer
+            open:
+              type: integer
+            resolved:
+              type: integer
+        childOutcomes:
+          $ref: "#/components/schemas/OutcomesSummary"
+        actionPlan:
+          type: array
+          items:
+            $ref: "#/components/schemas/RegulationAction"
+        riskSummary:
+          type: array
+          items:
+            $ref: "#/components/schemas/EvidenceGap"
+
+    AnnexA:
+      type: object
+      required: [generatedAt, period, admissions, discharges, incidents, missingEpisodes, safeguardingEvents, staffChanges, complaints, notifications]
+      properties:
+        generatedAt:
+          type: string
+        period:
+          type: string
+        admissions:
+          type: integer
+        discharges:
+          type: integer
+        incidents:
+          type: integer
+        missingEpisodes:
+          type: integer
+        safeguardingEvents:
+          type: integer
+        staffChanges:
+          type: integer
+        complaints:
+          type: integer
+        notifications:
+          type: integer
+        completenessScore:
+          type: integer
+        gaps:
+          type: array
+          items:
+            type: string
+
+    EvidenceGap:
+      type: object
+      required: [id, domain, area, description, severity, childId, recommendation]
+      properties:
+        id:
+          type: integer
+        domain:
+          type: string
+        area:
+          type: string
+        description:
+          type: string
+        severity:
+          type: string
+          enum: [critical, high, medium, low]
+        childId:
+          type: ["integer", "null"]
+        childName:
+          type: ["string", "null"]
+        recommendation:
+          type: string
+        daysOverdue:
+          type: ["integer", "null"]

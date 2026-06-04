@@ -1,0 +1,623 @@
+CAREOPS AI - MASTER PRODUCT DEFINITION
+
+You are a world-class team consisting of:
+
+* Ofsted Inspection Specialist
+* Children’s Residential Care Consultant
+* Responsible Individual
+* Registered Manager
+* Safeguarding Lead
+* Quality Assurance Lead
+* SaaS Product Manager
+* Enterprise Solution Architect
+* AI Systems Architect
+* Information Security Consultant
+* UX Designer
+* Data Architect
+
+Your mission is to design and build a production-grade SaaS platform called:
+
+CareOps AI
+
+Product Vision
+
+CareOps AI is an Operational Assurance and Inspection Readiness Platform for Ofsted-regulated Children’s Homes and Supported Accommodation Services.
+
+The platform continuously evaluates whether a service is inspection-ready and identifies evidence gaps, compliance risks, safeguarding concerns, workforce issues, governance weaknesses, and documentation deficiencies before Ofsted identifies them.
+
+The platform is NOT primarily a care recording system.
+
+The platform sits above existing systems such as:
+
+* Log My Care
+* ClearCare
+* CHARMS
+* Access
+* Internal spreadsheets
+* HR systems
+
+and acts as a continuous inspection-readiness and operational assurance layer.
+
+⸻
+
+CORE PROBLEM
+
+Registered Managers and Responsible Individuals often discover inspection weaknesses too late.
+
+Evidence exists across multiple systems but is:
+
+* Fragmented
+* Incomplete
+* Difficult to evidence
+* Poorly monitored
+* Not linked to regulatory expectations
+
+CareOps AI solves this by continuously monitoring readiness against Ofsted expectations.
+
+⸻
+
+PRIMARY CUSTOMER
+
+Initial customer:
+
+Registered Manager of a 3–10 bed Children’s Home.
+
+Secondary customers:
+
+* Responsible Individuals
+* Operations Managers
+* Directors
+* Quality Assurance Managers
+
+⸻
+
+PRIMARY VALUE PROPOSITION
+
+If Ofsted arrived tomorrow, CareOps AI would immediately show:
+
+* What evidence exists
+* What evidence is missing
+* What actions are overdue
+* Which risks require attention
+* Which regulatory areas are vulnerable
+
+The system becomes the operational dashboard for inspection readiness.
+
+⸻
+
+INSPECTION READINESS FRAMEWORK
+
+The platform must continuously score readiness across the following domains.
+
+Domain 1 - Children and Outcomes
+
+Measure:
+
+* Child voice
+* Wishes and feelings
+* Participation
+* Progress against targets
+* Education engagement
+* Health engagement
+* Independence skills
+* Relationships and family contact
+* Preparation for adulthood
+
+Output:
+
+Children & Outcomes Score
+
+⸻
+
+Domain 2 - Safeguarding
+
+Measure:
+
+* Missing episodes
+* Return interviews
+* Child protection events
+* Exploitation concerns
+* Self-harm risks
+* Risk assessments
+* Safeguarding actions
+* Notifications
+
+Output:
+
+Safeguarding Score
+
+⸻
+
+Domain 3 - Workforce Compliance
+
+Measure:
+
+* DBS status
+* Safer recruitment
+* References
+* Employment history verification
+* Right to Work
+* Qualifications
+* Mandatory training
+* Specialist training
+* Supervisions
+* Appraisals
+
+Output:
+
+Workforce Compliance Score
+
+⸻
+
+Domain 4 - Leadership & Management
+
+Measure:
+
+* Quality assurance activity
+* Audits
+* Team meetings
+* Supervision quality
+* Action plans
+* Regulation 44 actions
+* Regulation 45 reviews
+* Learning from incidents
+
+Output:
+
+Leadership & Management Score
+
+⸻
+
+Domain 5 - Documentation Quality
+
+Measure:
+
+* Daily logs
+* Key work sessions
+* Placement plans
+* Support plans
+* Risk assessments
+* Child voice evidence
+* Progress evidence
+
+Output:
+
+Documentation Quality Score
+
+⸻
+
+Domain 6 - Governance
+
+Measure:
+
+* Complaints
+* Compliments
+* Notifications
+* Policies
+* Statement of Purpose
+* Internal audits
+* External reviews
+
+Output:
+
+Governance Score
+
+⸻
+
+Domain 7 - Environment
+
+Measure:
+
+* Fire safety
+* Health and safety
+* Maintenance records
+* Environmental audits
+* Bedroom standards
+
+Output:
+
+Environment Score
+
+⸻
+
+MASTER DASHBOARD
+
+Display:
+
+Overall Inspection Readiness Score
+
+Example:
+
+Overall Inspection Readiness = 84%
+
+Children & Outcomes = 82%
+
+Safeguarding = 91%
+
+Workforce = 74%
+
+Leadership = 79%
+
+Documentation = 88%
+
+Governance = 85%
+
+Environment = 95%
+
+⸻
+
+CRITICAL ALERT ENGINE
+
+Examples:
+
+🔴 DBS expiring in 7 days
+
+🔴 Supervision overdue
+
+🔴 Missing return interview
+
+🔴 Risk assessment not reviewed after incident
+
+🔴 Child voice not evidenced in 30 days
+
+🔴 Regulation 44 action overdue
+
+Each alert must:
+
+* Explain risk
+* Explain regulatory impact
+* Recommend action
+* Assign owner
+* Track resolution
+
+⸻
+
+AI EVIDENCE GAP ENGINE
+
+The AI must continuously analyse records and identify:
+
+Missing evidence
+
+Weak evidence
+
+Outdated evidence
+
+Inconsistent evidence
+
+For example:
+
+Child Voice:
+
+No wishes and feelings recorded in last 21 days
+
+Progress:
+
+No evidence recorded against independence goal
+
+Education:
+
+Attendance decline not reviewed
+
+Safeguarding:
+
+Return interview missing
+
+Risk:
+
+Incident occurred but risk assessment not updated
+
+⸻
+
+ANNEX A AUTOMATION
+
+Generate Annex A automatically.
+
+Pull data from:
+
+* Incidents
+* Missing episodes
+* Admissions
+* Safeguarding events
+* Child data
+* Staffing data
+
+Validate completeness.
+
+Produce inspection-ready output.
+
+⸻
+
+NOTIFICATION ASSISTANT
+
+User enters incident.
+
+AI evaluates:
+
+* Seriousness
+* Child protection implications
+* Safeguarding implications
+* Notification requirements
+
+Output:
+
+Notification Required:
+Yes / No
+
+Reason
+
+Suggested wording
+
+Actions required
+
+⸻
+
+RISK ASSESSMENT MONITOR
+
+Monitor:
+
+* Review frequency
+* Risk escalation
+* Incident linkage
+* Safeguarding linkage
+
+Detect:
+
+Incident occurred but risk assessment not reviewed.
+
+Missing episode occurred but no review completed.
+
+Child protection concern but no update recorded.
+
+⸻
+
+CHILD VOICE ENGINE
+
+Measure:
+
+* House meetings
+* Complaints
+* Feedback
+* Direct work
+* Key work
+* Surveys
+* Wishes and feelings
+
+Generate:
+
+Child Voice Score
+
+Evidence quality score
+
+Participation trend
+
+⸻
+
+OUTCOME TRACKING
+
+Track:
+
+Education
+
+Health
+
+Relationships
+
+Independence
+
+Employment
+
+Community engagement
+
+For each young person:
+
+Current status
+
+Baseline
+
+Progress
+
+Evidence
+
+Next actions
+
+⸻
+
+SAFER RECRUITMENT MODULE
+
+Track:
+
+Application
+
+Interview notes
+
+References
+
+Employment history
+
+DBS
+
+Right to Work
+
+Qualifications
+
+Training
+
+Output:
+
+Safer Recruitment Compliance Score
+
+⸻
+
+TRAINING & SUPERVISION MODULE
+
+Track:
+
+Mandatory training
+
+Specialist training
+
+Refresher training
+
+Supervisions
+
+Appraisals
+
+Probation reviews
+
+Generate:
+
+Compliance dashboard
+
+Upcoming expiry alerts
+
+⸻
+
+STATEMENT OF PURPOSE MONITOR
+
+Identify changes requiring review.
+
+Examples:
+
+Manager changes
+
+Policy changes
+
+Service model changes
+
+Behaviour management changes
+
+Generate reminder:
+
+Statement of Purpose may require update.
+
+⸻
+
+REGULATION 44 & 45 TRACKER
+
+Track:
+
+Actions raised
+
+Due dates
+
+Evidence uploaded
+
+Status
+
+Escalation
+
+Generate:
+
+Outstanding Actions Dashboard
+
+⸻
+
+INSPECTION MODE
+
+One-click preparation for inspection.
+
+Generate:
+
+Inspection pack
+
+Annex A
+
+Workforce summary
+
+Safeguarding summary
+
+Complaints summary
+
+Child outcomes summary
+
+Action plan summary
+
+Risk summary
+
+⸻
+
+SECURITY
+
+Comply with:
+
+UK GDPR
+
+Data Protection Act
+
+Children’s Home Regulations
+
+Ofsted requirements
+
+ISO 27001 principles
+
+Implement:
+
+Audit logs
+
+Encryption
+
+Role-based access
+
+Multi-tenancy
+
+Backup strategy
+
+Disaster recovery
+
+⸻
+
+TECHNICAL ARCHITECTURE
+
+Frontend:
+
+Next.js
+
+Backend:
+
+FastAPI
+
+Database:
+
+PostgreSQL
+
+Authentication:
+
+Enterprise-grade RBAC
+
+Storage:
+
+Encrypted object storage
+
+AI:
+
+Modular provider architecture
+
+Deployment:
+
+Cloud-native SaaS
+
+⸻
+
+SUCCESS METRIC
+
+The primary success metric is:
+
+Reduction in inspection readiness gaps.
+
+Secondary metrics:
+
+Reduction in overdue actions.
+
+Improved workforce compliance.
+
+Improved safeguarding oversight.
+
+Improved child outcome tracking.
+
+Faster inspection preparation.
+
+⸻
+
+Build this as a platform that answers one question better than any competitor:
+
+“If Ofsted arrived tomorrow, what would they find?”

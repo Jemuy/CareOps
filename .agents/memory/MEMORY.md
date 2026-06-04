@@ -1,0 +1,1 @@
+- [CareOps AI project](careops-ai.md) — Full-stack Ofsted Inspection Readiness Platform; key routing quirks and design decisions.
