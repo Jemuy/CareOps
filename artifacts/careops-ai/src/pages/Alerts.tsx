@@ -13,7 +13,6 @@ export function Alerts() {
   const [severityFilter, setSeverityFilter] = useState<string>("all");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   
-  // NOTE: Assuming query expects params if needed. The backend schema `GetAlertsSeverity` vs string might be tricky, so we'll filter on client for now or pass if supported.
   const { data: alerts, isLoading, refetch } = useGetAlerts();
   const updateAlert = useUpdateAlert();
   const { toast } = useToast();
@@ -59,8 +58,8 @@ export function Alerts() {
     switch (severity) {
       case AlertSeverity.critical: return <Badge variant="destructive" className="bg-destructive text-white border-transparent">Critical</Badge>;
       case AlertSeverity.high: return <Badge variant="outline" className="bg-amber-500 text-white border-transparent">High</Badge>;
-      case AlertSeverity.medium: return <Badge variant="outline" className="bg-amber-300 text-amber-900 border-transparent">Medium</Badge>;
-      case AlertSeverity.low: return <Badge variant="outline" className="bg-slate-200 text-slate-800 border-transparent">Low</Badge>;
+      case AlertSeverity.medium: return <Badge variant="outline" className="bg-amber-300 text-amber-900 border-transparent dark:bg-amber-600 dark:text-white">Medium</Badge>;
+      case AlertSeverity.low: return <Badge variant="outline" className="bg-muted text-foreground border-border">Low</Badge>;
       default: return <Badge variant="outline">{severity}</Badge>;
     }
   };
@@ -112,20 +111,20 @@ export function Alerts() {
           filteredAlerts.map(alert => (
             <Card key={alert.id} className="overflow-hidden">
               <div className="flex flex-col md:flex-row">
-                <div className={`w-2 md:w-2 shrink-0 ${
+                <div className={`w-full h-1.5 md:w-1.5 md:h-auto shrink-0 ${
                   alert.severity === 'critical' ? 'bg-destructive' : 
                   alert.severity === 'high' ? 'bg-amber-500' :
-                  alert.severity === 'medium' ? 'bg-amber-300' : 'bg-slate-300'
+                  alert.severity === 'medium' ? 'bg-amber-300' : 'bg-muted-foreground/30'
                 }`}></div>
                 <div className="p-6 flex-1">
                   <div className="flex justify-between items-start gap-4 mb-4">
                     <div>
                       <div className="flex items-center gap-2 mb-2">
                         {getSeverityBadge(alert.severity)}
-                        <Badge variant="outline" className="uppercase text-[10px] tracking-wider text-slate-500 bg-slate-50">{alert.domain}</Badge>
+                        <Badge variant="outline" className="uppercase text-[10px] tracking-wider text-muted-foreground">{alert.domain}</Badge>
                       </div>
                       <h3 className="text-lg font-bold">{alert.title}</h3>
-                      <p className="text-slate-600 mt-1">{alert.description}</p>
+                      <p className="text-muted-foreground mt-1">{alert.description}</p>
                     </div>
                     
                     <div className="flex flex-col gap-2 shrink-0 min-w-[140px]">
@@ -134,9 +133,11 @@ export function Alerts() {
                         onValueChange={(val) => handleStatusUpdate(alert.id, val)}
                       >
                         <SelectTrigger className={`h-8 text-xs font-semibold ${
-                          alert.status === 'resolved' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 
-                          alert.status === 'in_progress' ? 'bg-blue-50 text-blue-700 border-blue-200' : 
-                          'bg-slate-50 text-slate-700 border-slate-200'
+                          alert.status === 'resolved'
+                            ? 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-700'
+                            : alert.status === 'in_progress'
+                            ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 border-blue-200 dark:border-blue-700'
+                            : 'bg-muted text-foreground border-border'
                         }`}>
                           <SelectValue />
                         </SelectTrigger>
@@ -146,24 +147,24 @@ export function Alerts() {
                           <SelectItem value={AlertStatus.resolved}>Resolved</SelectItem>
                         </SelectContent>
                       </Select>
-                      <span className="text-xs text-slate-400 text-right">
+                      <span className="text-xs text-muted-foreground text-right">
                         Created: {new Date(alert.createdAt).toLocaleDateString()}
                       </span>
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6 bg-slate-50 rounded-md p-4 border border-slate-100">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6 bg-muted rounded-md p-4 border border-border">
                     <div>
-                      <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 block mb-1">Risk Explanation</span>
-                      <p className="text-sm text-slate-700">{alert.riskExplanation}</p>
+                      <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground block mb-1">Risk Explanation</span>
+                      <p className="text-sm text-foreground/80">{alert.riskExplanation}</p>
                     </div>
                     <div>
-                      <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 block mb-1">Regulatory Impact</span>
-                      <p className="text-sm text-slate-700">{alert.regulatoryImpact}</p>
+                      <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground block mb-1">Regulatory Impact</span>
+                      <p className="text-sm text-foreground/80">{alert.regulatoryImpact}</p>
                     </div>
                     <div className="md:col-span-2">
-                      <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 block mb-1">Recommended Action</span>
-                      <p className="text-sm text-slate-800 font-medium">{alert.recommendedAction}</p>
+                      <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground block mb-1">Recommended Action</span>
+                      <p className="text-sm text-foreground font-medium">{alert.recommendedAction}</p>
                     </div>
                   </div>
                 </div>

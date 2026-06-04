@@ -33,9 +33,9 @@ export function Safeguarding() {
     switch (level) {
       case "critical": return "bg-destructive text-white border-transparent";
       case "high": return "bg-amber-500 text-white border-transparent";
-      case "medium": return "bg-amber-100 text-amber-800 border-amber-200";
-      case "low": return "bg-emerald-100 text-emerald-800 border-emerald-200";
-      default: return "bg-slate-100 text-slate-800";
+      case "medium": return "bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-300 border-amber-200 dark:border-amber-700";
+      case "low": return "bg-emerald-100 dark:bg-emerald-900/40 text-emerald-800 dark:text-emerald-300 border-emerald-200 dark:border-emerald-700";
+      default: return "bg-muted text-foreground";
     }
   };
 
@@ -43,19 +43,19 @@ export function Safeguarding() {
     switch (status) {
       case "open":
         return (
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-rose-50 border border-rose-200 text-sm font-medium text-rose-700">
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-rose-50 dark:bg-rose-900/30 border border-rose-200 dark:border-rose-700 text-sm font-medium text-rose-700 dark:text-rose-400">
             <AlertCircle className="w-3.5 h-3.5" /> Open
           </div>
         );
       case "actioned":
         return (
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-sm font-medium text-blue-700">
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 text-sm font-medium text-blue-700 dark:text-blue-400">
             <FileText className="w-3.5 h-3.5" /> Actioned
           </div>
         );
       case "closed":
         return (
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-sm font-medium text-emerald-700">
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-700 text-sm font-medium text-emerald-700 dark:text-emerald-400">
             <CheckCircle className="w-3.5 h-3.5" /> Closed
           </div>
         );
@@ -67,8 +67,8 @@ export function Safeguarding() {
         );
       default:
         return (
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 border text-sm font-medium capitalize">
-            <FileText className="w-3.5 h-3.5 text-slate-400" /> {status}
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-muted border border-border text-sm font-medium capitalize">
+            <FileText className="w-3.5 h-3.5 text-muted-foreground" /> {status}
           </div>
         );
     }
@@ -96,35 +96,35 @@ export function Safeguarding() {
       </div>
 
       <div className="grid grid-cols-3 gap-4">
-        <Card className="bg-slate-50 border-slate-200">
+        <Card>
           <CardContent className="p-4 flex items-center justify-between">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Open Events</p>
-              <p className={`text-3xl font-bold ${openEvents > 0 ? "text-rose-600" : "text-emerald-600"}`}>{openEvents}</p>
+              <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1">Open Events</p>
+              <p className={`text-3xl font-bold ${openEvents > 0 ? "text-rose-600 dark:text-rose-400" : "text-emerald-600 dark:text-emerald-400"}`}>{openEvents}</p>
             </div>
-            <div className={`p-3 rounded-full ${openEvents > 0 ? "bg-rose-100 text-rose-600" : "bg-emerald-100 text-emerald-600"}`}>
+            <div className={`p-3 rounded-full ${openEvents > 0 ? "bg-rose-100 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400" : "bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400"}`}>
               <ShieldAlert size={22} />
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-slate-50 border-slate-200">
+        <Card>
           <CardContent className="p-4 flex items-center justify-between">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Currently Missing</p>
-              <p className={`text-3xl font-bold ${openMissing > 0 ? "text-amber-600" : "text-emerald-600"}`}>{openMissing}</p>
+              <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1">Currently Missing</p>
+              <p className={`text-3xl font-bold ${openMissing > 0 ? "text-amber-600 dark:text-amber-400" : "text-emerald-600 dark:text-emerald-400"}`}>{openMissing}</p>
             </div>
-            <div className={`p-3 rounded-full ${openMissing > 0 ? "bg-amber-100 text-amber-600" : "bg-emerald-100 text-emerald-600"}`}>
+            <div className={`p-3 rounded-full ${openMissing > 0 ? "bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400" : "bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400"}`}>
               <MapPin size={22} />
             </div>
           </CardContent>
         </Card>
-        <Card className={`border-slate-200 ${interviewsOutstanding > 0 ? "bg-rose-50 border-rose-200" : "bg-slate-50"}`}>
-          <CardContent className="p-4 flex items-center justify-between">
+        <Card className={interviewsOutstanding > 0 ? "border-rose-300 dark:border-rose-800" : ""}>
+          <CardContent className={`p-4 flex items-center justify-between rounded-xl ${interviewsOutstanding > 0 ? "bg-rose-50 dark:bg-rose-950/40" : ""}`}>
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Return Interviews Due</p>
-              <p className={`text-3xl font-bold ${interviewsOutstanding > 0 ? "text-rose-600" : "text-emerald-600"}`}>{interviewsOutstanding}</p>
+              <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1">Return Interviews Due</p>
+              <p className={`text-3xl font-bold ${interviewsOutstanding > 0 ? "text-rose-600 dark:text-rose-400" : "text-emerald-600 dark:text-emerald-400"}`}>{interviewsOutstanding}</p>
             </div>
-            <div className={`p-3 rounded-full ${interviewsOutstanding > 0 ? "bg-rose-100 text-rose-600" : "bg-emerald-100 text-emerald-600"}`}>
+            <div className={`p-3 rounded-full ${interviewsOutstanding > 0 ? "bg-rose-100 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400" : "bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400"}`}>
               <Clock size={22} />
             </div>
           </CardContent>
@@ -152,7 +152,7 @@ export function Safeguarding() {
             <CardContent className="p-0">
               <div className="divide-y border-t mt-4">
                 {events?.map(event => (
-                  <div key={event.id} className="p-4 sm:p-6 hover:bg-slate-50/70 transition-colors flex flex-col sm:flex-row gap-4 sm:items-center">
+                  <div key={event.id} className="p-4 sm:p-6 hover:bg-muted/40 transition-colors flex flex-col sm:flex-row gap-4 sm:items-center">
                     <div className="flex-1 min-w-0">
                       <div className="flex flex-wrap items-center gap-2 mb-2">
                         <Badge variant="outline" className={getRiskColor(event.riskLevel)}>
@@ -162,25 +162,25 @@ export function Safeguarding() {
                           {event.type.replace(/_/g, " ")}
                         </Badge>
                         {event.notificationRequired && !event.notificationSent && (
-                          <Badge variant="outline" className="bg-rose-50 text-rose-700 border-rose-200 animate-pulse">
+                          <Badge variant="outline" className="bg-rose-50 dark:bg-rose-900/30 text-rose-700 dark:text-rose-400 border-rose-200 dark:border-rose-700 animate-pulse">
                             ⚠ Notification Overdue
                           </Badge>
                         )}
                         {event.notificationRequired && event.notificationSent && (
-                          <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200">
+                          <Badge variant="outline" className="bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-700">
                             ✓ Notification Sent
                           </Badge>
                         )}
                       </div>
-                      <h3 className="text-base font-semibold text-slate-800 mb-0.5">
+                      <h3 className="text-base font-semibold text-foreground mb-0.5">
                         {event.childName || `Child ID: ${event.childId}`}
                       </h3>
-                      <p className="text-slate-600 text-sm line-clamp-2">{event.description}</p>
-                      <div className="flex flex-wrap items-center gap-4 mt-2 text-xs text-slate-500">
+                      <p className="text-muted-foreground text-sm line-clamp-2">{event.description}</p>
+                      <div className="flex flex-wrap items-center gap-4 mt-2 text-xs text-muted-foreground">
                         <span>Date: {new Date(event.date).toLocaleDateString("en-GB")}</span>
                         <span>Reported by: {event.reportedBy}</span>
                         {event.actionTaken && (
-                          <span className="text-emerald-600 font-medium">Action taken recorded</span>
+                          <span className="text-emerald-600 dark:text-emerald-400 font-medium">Action taken recorded</span>
                         )}
                       </div>
                     </div>
@@ -195,8 +195,8 @@ export function Safeguarding() {
                   </div>
                 ))}
                 {(!events || events.length === 0) && (
-                  <div className="p-12 text-center text-slate-500">
-                    <ShieldAlert className="w-12 h-12 mx-auto text-slate-300 mb-3" />
+                  <div className="p-12 text-center text-muted-foreground">
+                    <ShieldAlert className="w-12 h-12 mx-auto text-muted-foreground/30 mb-3" />
                     <p>No safeguarding events recorded.</p>
                   </div>
                 )}
@@ -210,7 +210,7 @@ export function Safeguarding() {
             <CardContent className="p-0">
               <div className="divide-y border-t mt-4">
                 {missing?.map(episode => (
-                  <div key={episode.id} className="p-4 sm:p-6 hover:bg-slate-50/70 transition-colors flex flex-col sm:flex-row gap-4 sm:items-start">
+                  <div key={episode.id} className="p-4 sm:p-6 hover:bg-muted/40 transition-colors flex flex-col sm:flex-row gap-4 sm:items-start">
                     <div className="flex-1 min-w-0">
                       <div className="flex flex-wrap items-center gap-2 mb-2">
                         <Badge variant="outline" className={getRiskColor(episode.riskLevel)}>
@@ -220,12 +220,12 @@ export function Safeguarding() {
                           <Badge variant="destructive" className="animate-pulse">Currently Missing</Badge>
                         )}
                         {episode.returnedAt && !episode.returnInterviewCompleted && (
-                          <Badge variant="outline" className="bg-amber-50 text-amber-700 border-amber-200">
+                          <Badge variant="outline" className="bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 border-amber-200 dark:border-amber-700">
                             ⚠ Return Interview Outstanding
                           </Badge>
                         )}
                         {episode.returnInterviewCompleted && (
-                          <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200">
+                          <Badge variant="outline" className="bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-700">
                             ✓ Return Interview Done
                           </Badge>
                         )}
@@ -233,21 +233,21 @@ export function Safeguarding() {
                           <Badge variant="secondary" className="text-[10px]">Police Notified{episode.policeRef ? ` · ${episode.policeRef}` : ""}</Badge>
                         )}
                       </div>
-                      <h3 className="text-base font-semibold text-slate-800 mb-0.5">
+                      <h3 className="text-base font-semibold text-foreground mb-0.5">
                         {(episode as any).childName || `Child ID: ${episode.childId}`}
                       </h3>
                       {episode.circumstances && (
-                        <p className="text-slate-600 text-sm line-clamp-2 mb-2">{episode.circumstances}</p>
+                        <p className="text-muted-foreground text-sm line-clamp-2 mb-2">{episode.circumstances}</p>
                       )}
-                      <div className="flex flex-wrap items-center gap-4 text-xs text-slate-500">
+                      <div className="flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
                         <span>Missing from: {new Date(episode.missingFrom).toLocaleString("en-GB", { dateStyle: "short", timeStyle: "short" })}</span>
                         {episode.returnedAt ? (
                           <>
                             <span>Returned: {new Date(episode.returnedAt).toLocaleString("en-GB", { dateStyle: "short", timeStyle: "short" })}</span>
-                            <span className="font-medium text-slate-600">Duration: {formatDuration(episode.missingFrom, episode.returnedAt)}</span>
+                            <span className="font-medium text-foreground/70">Duration: {formatDuration(episode.missingFrom, episode.returnedAt)}</span>
                           </>
                         ) : (
-                          <span className="font-semibold text-rose-600">Missing for: {formatDuration(episode.missingFrom)}</span>
+                          <span className="font-semibold text-rose-600 dark:text-rose-400">Missing for: {formatDuration(episode.missingFrom)}</span>
                         )}
                       </div>
                     </div>
@@ -261,8 +261,8 @@ export function Safeguarding() {
                   </div>
                 ))}
                 {(!missing || missing.length === 0) && (
-                  <div className="p-12 text-center text-slate-500">
-                    <MapPin className="w-12 h-12 mx-auto text-slate-300 mb-3" />
+                  <div className="p-12 text-center text-muted-foreground">
+                    <MapPin className="w-12 h-12 mx-auto text-muted-foreground/30 mb-3" />
                     <p>No missing episodes recorded.</p>
                   </div>
                 )}

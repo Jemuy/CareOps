@@ -18,8 +18,8 @@ export function Training() {
 
   const getTrainingStatusBadge = (status: string) => {
     switch (status) {
-      case 'current': return <Badge variant="outline" className="border-emerald-500 text-emerald-700 bg-emerald-50">Current</Badge>;
-      case 'expiring_soon': return <Badge variant="outline" className="border-amber-500 text-amber-700 bg-amber-50">Expiring Soon</Badge>;
+      case 'current': return <Badge variant="outline" className="border-emerald-500 text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/30 dark:border-emerald-700">Current</Badge>;
+      case 'expiring_soon': return <Badge variant="outline" className="border-amber-500 text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/30 dark:border-amber-700">Expiring Soon</Badge>;
       case 'expired': return <Badge variant="destructive">Expired</Badge>;
       default: return <Badge variant="secondary">{status}</Badge>;
     }
@@ -34,35 +34,35 @@ export function Training() {
 
       {summary && (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <Card className="bg-slate-50 border-slate-200">
+          <Card>
             <CardContent className="p-4 flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-slate-500 uppercase tracking-wider mb-1">Expired Training</p>
-                <h3 className="text-3xl font-bold text-slate-800">{summary.mandatoryExpired}</h3>
+                <p className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-1">Expired Training</p>
+                <h3 className="text-3xl font-bold text-foreground">{summary.mandatoryExpired}</h3>
               </div>
-              <div className="p-3 rounded-full bg-rose-100 text-rose-600">
+              <div className="p-3 rounded-full bg-rose-100 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400">
                 <AlertCircle size={24} />
               </div>
             </CardContent>
           </Card>
-          <Card className="bg-slate-50 border-slate-200">
+          <Card>
             <CardContent className="p-4 flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-slate-500 uppercase tracking-wider mb-1">Overdue Supervisions</p>
-                <h3 className="text-3xl font-bold text-slate-800">{summary.supervisionsDue}</h3>
+                <p className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-1">Overdue Supervisions</p>
+                <h3 className="text-3xl font-bold text-foreground">{summary.supervisionsDue}</h3>
               </div>
-              <div className="p-3 rounded-full bg-amber-100 text-amber-600">
+              <div className="p-3 rounded-full bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400">
                 <Calendar size={24} />
               </div>
             </CardContent>
           </Card>
-          <Card className="bg-slate-50 border-slate-200">
+          <Card>
             <CardContent className="p-4 flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-slate-500 uppercase tracking-wider mb-1">Overdue Appraisals</p>
-                <h3 className="text-3xl font-bold text-slate-800">{summary.appraisalsDue}</h3>
+                <p className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-1">Overdue Appraisals</p>
+                <h3 className="text-3xl font-bold text-foreground">{summary.appraisalsDue}</h3>
               </div>
-              <div className="p-3 rounded-full bg-blue-100 text-blue-600">
+              <div className="p-3 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400">
                 <GraduationCap size={24} />
               </div>
             </CardContent>
@@ -80,7 +80,7 @@ export function Training() {
           <Card>
             <CardContent className="p-0">
               <Table>
-                <TableHeader className="bg-slate-50">
+                <TableHeader className="bg-muted">
                   <TableRow>
                     <TableHead>Staff Member</TableHead>
                     <TableHead>Training Type</TableHead>
@@ -93,17 +93,17 @@ export function Training() {
                 <TableBody>
                   {training?.map(t => (
                     <TableRow key={t.id}>
-                      <TableCell className="font-medium text-slate-800">{t.staffName}</TableCell>
+                      <TableCell className="font-medium text-foreground">{t.staffName}</TableCell>
                       <TableCell className="text-sm">{t.trainingType}</TableCell>
                       <TableCell><Badge variant="outline" className="capitalize text-[10px]">{t.category}</Badge></TableCell>
-                      <TableCell className="text-sm text-slate-600">{new Date(t.completedDate).toLocaleDateString()}</TableCell>
-                      <TableCell className="text-sm text-slate-600">{new Date(t.expiryDate).toLocaleDateString()}</TableCell>
+                      <TableCell className="text-sm text-muted-foreground">{new Date(t.completedDate).toLocaleDateString()}</TableCell>
+                      <TableCell className="text-sm text-muted-foreground">{new Date(t.expiryDate).toLocaleDateString()}</TableCell>
                       <TableCell>{getTrainingStatusBadge(t.status)}</TableCell>
                     </TableRow>
                   ))}
                   {(!training || training.length === 0) && (
                     <TableRow>
-                      <TableCell colSpan={6} className="text-center p-8 text-slate-500">No training records found.</TableCell>
+                      <TableCell colSpan={6} className="text-center p-8 text-muted-foreground">No training records found.</TableCell>
                     </TableRow>
                   )}
                 </TableBody>
@@ -116,7 +116,7 @@ export function Training() {
           <Card>
             <CardContent className="p-0">
               <Table>
-                <TableHeader className="bg-slate-50">
+                <TableHeader className="bg-muted">
                   <TableRow>
                     <TableHead>Staff Member</TableHead>
                     <TableHead>Type</TableHead>
@@ -128,10 +128,10 @@ export function Training() {
                 <TableBody>
                   {supervisions?.map(s => (
                     <TableRow key={s.id}>
-                      <TableCell className="font-medium text-slate-800">{s.staffName}</TableCell>
+                      <TableCell className="font-medium text-foreground">{s.staffName}</TableCell>
                       <TableCell><Badge variant="secondary" className="capitalize text-[10px]">{s.type.replace('_', ' ')}</Badge></TableCell>
-                      <TableCell className="text-sm text-slate-700">{s.supervisorName}</TableCell>
-                      <TableCell className="text-sm text-slate-600">{new Date(s.date).toLocaleDateString()}</TableCell>
+                      <TableCell className="text-sm text-foreground/80">{s.supervisorName}</TableCell>
+                      <TableCell className="text-sm text-muted-foreground">{new Date(s.date).toLocaleDateString()}</TableCell>
                       <TableCell className="text-sm font-medium">
                         {new Date(s.nextDueDate) < new Date() ? (
                           <span className="text-destructive flex items-center gap-1">
@@ -145,7 +145,7 @@ export function Training() {
                   ))}
                   {(!supervisions || supervisions.length === 0) && (
                     <TableRow>
-                      <TableCell colSpan={5} className="text-center p-8 text-slate-500">No supervision records found.</TableCell>
+                      <TableCell colSpan={5} className="text-center p-8 text-muted-foreground">No supervision records found.</TableCell>
                     </TableRow>
                   )}
                 </TableBody>

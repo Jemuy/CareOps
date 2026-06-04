@@ -28,8 +28,8 @@ export function Workforce() {
 
   const getDbsBadge = (status: StaffMemberDbsStatus) => {
     switch (status) {
-      case "valid": return <Badge variant="outline" className="border-emerald-500 text-emerald-700 bg-emerald-50">Valid</Badge>;
-      case "expiring_soon": return <Badge variant="outline" className="border-amber-500 text-amber-700 bg-amber-50">Expiring Soon</Badge>;
+      case "valid": return <Badge variant="outline" className="border-emerald-500 text-emerald-700 bg-emerald-50 dark:bg-emerald-900/30 dark:text-emerald-400 dark:border-emerald-700">Valid</Badge>;
+      case "expiring_soon": return <Badge variant="outline" className="border-amber-500 text-amber-700 bg-amber-50 dark:bg-amber-900/30 dark:text-amber-400 dark:border-amber-700">Expiring Soon</Badge>;
       case "expired": return <Badge variant="destructive">Expired</Badge>;
       case "pending": return <Badge variant="secondary">Pending</Badge>;
       default: return <Badge variant="outline">{status}</Badge>;
@@ -39,7 +39,7 @@ export function Workforce() {
   const getStatusBadge = (status?: StaffMemberStatus) => {
     switch (status) {
       case "active": return <Badge className="bg-primary hover:bg-primary/90">Active</Badge>;
-      case "on_leave": return <Badge variant="outline" className="border-amber-500 text-amber-700">On Leave</Badge>;
+      case "on_leave": return <Badge variant="outline" className="border-amber-500 text-amber-700 dark:text-amber-400">On Leave</Badge>;
       case "left": return <Badge variant="secondary">Left</Badge>;
       default: return null;
     }
@@ -67,11 +67,11 @@ export function Workforce() {
 
       {summary && (
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <Card className="bg-slate-50 border-slate-200">
+          <Card>
             <CardContent className="p-4 flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-slate-500 uppercase tracking-wider mb-1">Overall Score</p>
-                <h3 className={`text-3xl font-bold ${summary.overallScore >= 80 ? "text-emerald-700" : summary.overallScore >= 60 ? "text-amber-600" : "text-destructive"}`}>
+                <p className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-1">Overall Score</p>
+                <h3 className={`text-3xl font-bold ${summary.overallScore >= 80 ? "text-emerald-600 dark:text-emerald-400" : summary.overallScore >= 60 ? "text-amber-600 dark:text-amber-400" : "text-destructive"}`}>
                   {summary.overallScore}%
                 </h3>
               </div>
@@ -80,41 +80,41 @@ export function Workforce() {
               </div>
             </CardContent>
           </Card>
-          <Card className={`border-slate-200 ${summary.dbsExpired + summary.dbsExpiringSoon > 0 ? "bg-rose-50 border-rose-200" : "bg-slate-50"}`}>
-            <CardContent className="p-4 flex items-center justify-between">
+          <Card className={summary.dbsExpired + summary.dbsExpiringSoon > 0 ? "border-rose-300 dark:border-rose-800" : ""}>
+            <CardContent className={`p-4 flex items-center justify-between rounded-xl ${summary.dbsExpired + summary.dbsExpiringSoon > 0 ? "bg-rose-50 dark:bg-rose-950/40" : ""}`}>
               <div>
-                <p className="text-sm font-medium text-slate-500 uppercase tracking-wider mb-1">DBS Issues</p>
-                <h3 className={`text-3xl font-bold ${summary.dbsExpired + summary.dbsExpiringSoon > 0 ? "text-destructive" : "text-slate-800"}`}>
+                <p className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-1">DBS Issues</p>
+                <h3 className={`text-3xl font-bold ${summary.dbsExpired + summary.dbsExpiringSoon > 0 ? "text-destructive" : "text-foreground"}`}>
                   {summary.dbsExpired + summary.dbsExpiringSoon}
                 </h3>
-                <p className="text-xs text-slate-500 mt-1">{summary.dbsExpired} expired{summary.dbsExpiringSoon > 0 ? `, ${summary.dbsExpiringSoon} expiring` : ""}</p>
+                <p className="text-xs text-muted-foreground mt-1">{summary.dbsExpired} expired{summary.dbsExpiringSoon > 0 ? `, ${summary.dbsExpiringSoon} expiring` : ""}</p>
               </div>
-              <div className={`p-3 rounded-full ${summary.dbsExpired > 0 ? "bg-rose-100 text-rose-600" : "bg-amber-100 text-amber-600"}`}>
+              <div className={`p-3 rounded-full ${summary.dbsExpired > 0 ? "bg-rose-100 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400" : "bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400"}`}>
                 <ShieldAlert size={24} />
               </div>
             </CardContent>
           </Card>
-          <Card className="bg-slate-50 border-slate-200">
+          <Card>
             <CardContent className="p-4 flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-slate-500 uppercase tracking-wider mb-1">Training Compliant</p>
-                <h3 className="text-3xl font-bold text-slate-800">{summary.trainingCompliant}</h3>
-                <p className="text-xs text-slate-500 mt-1">of {summary.totalStaff} staff</p>
+                <p className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-1">Training Compliant</p>
+                <h3 className="text-3xl font-bold text-foreground">{summary.trainingCompliant}</h3>
+                <p className="text-xs text-muted-foreground mt-1">of {summary.totalStaff} staff</p>
               </div>
-              <div className="p-3 rounded-full bg-blue-100 text-blue-600">
+              <div className="p-3 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400">
                 <GraduationCap size={24} />
               </div>
             </CardContent>
           </Card>
-          <Card className={`border-slate-200 ${summary.supervisionOverdue > 0 ? "bg-amber-50 border-amber-200" : "bg-slate-50"}`}>
-            <CardContent className="p-4 flex items-center justify-between">
+          <Card className={summary.supervisionOverdue > 0 ? "border-amber-300 dark:border-amber-800" : ""}>
+            <CardContent className={`p-4 flex items-center justify-between rounded-xl ${summary.supervisionOverdue > 0 ? "bg-amber-50 dark:bg-amber-950/40" : ""}`}>
               <div>
-                <p className="text-sm font-medium text-slate-500 uppercase tracking-wider mb-1">Overdue Supervisions</p>
-                <h3 className={`text-3xl font-bold ${summary.supervisionOverdue > 0 ? "text-amber-700" : "text-slate-800"}`}>
+                <p className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-1">Overdue Supervisions</p>
+                <h3 className={`text-3xl font-bold ${summary.supervisionOverdue > 0 ? "text-amber-700 dark:text-amber-400" : "text-foreground"}`}>
                   {summary.supervisionOverdue}
                 </h3>
               </div>
-              <div className={`p-3 rounded-full ${summary.supervisionOverdue > 0 ? "bg-amber-100 text-amber-600" : "bg-slate-100 text-slate-500"}`}>
+              <div className={`p-3 rounded-full ${summary.supervisionOverdue > 0 ? "bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400" : "bg-muted text-muted-foreground"}`}>
                 <Calendar size={24} />
               </div>
             </CardContent>
@@ -127,7 +127,7 @@ export function Workforce() {
           <CardContent className="p-0">
             <div className="overflow-x-auto">
               <Table>
-                <TableHeader className="bg-slate-50">
+                <TableHeader className="bg-muted">
                   <TableRow>
                     <TableHead className="w-[200px]">Name</TableHead>
                     <TableHead className="hidden sm:table-cell">Status</TableHead>
@@ -142,10 +142,10 @@ export function Workforce() {
                   {staff?.map(member => {
                     const supWarn = supervisionWarning(member);
                     return (
-                      <TableRow key={member.id} className="hover:bg-slate-50/50">
+                      <TableRow key={member.id} className="hover:bg-muted/50">
                         <TableCell className="font-medium">
                           <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center font-bold text-xs shrink-0">
+                            <div className="w-8 h-8 rounded-full bg-muted text-foreground flex items-center justify-center font-bold text-xs shrink-0">
                               {member.firstName[0]}{member.lastName[0]}
                             </div>
                             <div>
@@ -171,31 +171,31 @@ export function Workforce() {
                           </div>
                         </TableCell>
                         <TableCell className="hidden sm:table-cell">{getStatusBadge(member.status)}</TableCell>
-                        <TableCell className="hidden md:table-cell text-slate-600 text-sm">{member.role}</TableCell>
+                        <TableCell className="hidden md:table-cell text-muted-foreground text-sm">{member.role}</TableCell>
                         <TableCell className="hidden lg:table-cell">
                           <div className="flex items-center gap-2">
-                            <div className="w-full bg-slate-200 rounded-full h-2 max-w-[100px]">
+                            <div className="w-full bg-muted rounded-full h-2 max-w-[100px]">
                               <div
                                 className={`h-2 rounded-full ${member.complianceScore >= 90 ? "bg-emerald-500" : member.complianceScore >= 70 ? "bg-amber-500" : "bg-destructive"}`}
                                 style={{ width: `${member.complianceScore}%` }}
                               ></div>
                             </div>
-                            <span className="text-xs font-medium text-slate-600">{member.complianceScore}%</span>
+                            <span className="text-xs font-medium text-muted-foreground">{member.complianceScore}%</span>
                           </div>
                         </TableCell>
                         <TableCell>
                           {getDbsBadge(member.dbsStatus)}
                           {member.dbsExpiryDate && (
-                            <div className="text-[10px] text-slate-500 mt-1">
+                            <div className="text-[10px] text-muted-foreground mt-1">
                               Exp: {new Date(member.dbsExpiryDate).toLocaleDateString("en-GB")}
                             </div>
                           )}
                         </TableCell>
                         <TableCell className="hidden sm:table-cell">
                           {member.mandatoryTrainingComplete ? (
-                            <Badge variant="outline" className="border-emerald-500 text-emerald-700 bg-emerald-50">Complete</Badge>
+                            <Badge variant="outline" className="border-emerald-500 text-emerald-700 bg-emerald-50 dark:bg-emerald-900/30 dark:text-emerald-400 dark:border-emerald-700">Complete</Badge>
                           ) : (
-                            <Badge variant="outline" className="border-amber-500 text-amber-700 bg-amber-50">Incomplete</Badge>
+                            <Badge variant="outline" className="border-amber-500 text-amber-700 bg-amber-50 dark:bg-amber-900/30 dark:text-amber-400 dark:border-amber-700">Incomplete</Badge>
                           )}
                         </TableCell>
                         <TableCell className="text-right">
@@ -210,7 +210,7 @@ export function Workforce() {
                   })}
                   {(!staff || staff.length === 0) && (
                     <TableRow>
-                      <TableCell colSpan={7} className="h-32 text-center text-slate-500">
+                      <TableCell colSpan={7} className="h-32 text-center text-muted-foreground">
                         No staff members found.
                       </TableCell>
                     </TableRow>

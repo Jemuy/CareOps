@@ -27,7 +27,7 @@ export function Incidents() {
     switch (severity) {
       case "critical": return <Badge variant="destructive">Critical</Badge>;
       case "serious": return <Badge className="bg-amber-600 hover:bg-amber-700">Serious</Badge>;
-      case "moderate": return <Badge variant="outline" className="border-amber-400 text-amber-700">Moderate</Badge>;
+      case "moderate": return <Badge variant="outline" className="border-amber-400 text-amber-700 dark:text-amber-400 dark:border-amber-600">Moderate</Badge>;
       case "minor": return <Badge variant="secondary">Minor</Badge>;
       default: return <Badge>{severity}</Badge>;
     }
@@ -35,9 +35,9 @@ export function Incidents() {
 
   const getStatusBadge = (status: IncidentStatus) => {
     switch (status) {
-      case "open": return <Badge variant="outline" className="bg-rose-50 text-rose-700 border-rose-200">Open</Badge>;
-      case "under_review": return <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">Reviewing</Badge>;
-      case "closed": return <Badge variant="outline" className="bg-slate-100 text-slate-700 border-slate-200">Closed</Badge>;
+      case "open": return <Badge variant="outline" className="bg-rose-50 dark:bg-rose-900/30 text-rose-700 dark:text-rose-400 border-rose-200 dark:border-rose-700">Open</Badge>;
+      case "under_review": return <Badge variant="outline" className="bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 border-blue-200 dark:border-blue-700">Reviewing</Badge>;
+      case "closed": return <Badge variant="secondary">Closed</Badge>;
       default: return <Badge>{status}</Badge>;
     }
   };
@@ -54,13 +54,13 @@ export function Incidents() {
         </div>
         <div className="flex items-center gap-3">
           {notificationPending > 0 && (
-            <div className="flex items-center gap-2 bg-amber-50 border border-amber-200 text-amber-700 text-sm font-medium px-3 py-2 rounded-lg">
+            <div className="flex items-center gap-2 bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-700 text-amber-700 dark:text-amber-400 text-sm font-medium px-3 py-2 rounded-lg">
               <AlertTriangle className="w-4 h-4" />
               {notificationPending} notification{notificationPending > 1 ? "s" : ""} pending
             </div>
           )}
           {openCount > 0 && (
-            <div className="flex items-center gap-2 bg-rose-50 border border-rose-200 text-rose-700 text-sm font-medium px-3 py-2 rounded-lg">
+            <div className="flex items-center gap-2 bg-rose-50 dark:bg-rose-900/30 border border-rose-200 dark:border-rose-700 text-rose-700 dark:text-rose-400 text-sm font-medium px-3 py-2 rounded-lg">
               <ClipboardList className="w-4 h-4" />
               {openCount} open
             </div>
@@ -76,7 +76,7 @@ export function Incidents() {
         <CardContent className="p-0">
           <div className="overflow-x-auto">
             <Table>
-              <TableHeader className="bg-slate-50">
+              <TableHeader className="bg-muted">
                 <TableRow>
                   <TableHead className="w-[90px]">Date</TableHead>
                   <TableHead>Type</TableHead>
@@ -91,64 +91,76 @@ export function Incidents() {
                 {incidents?.map(incident => (
                   <React.Fragment key={incident.id}>
                     <TableRow
-                      className={`hover:bg-slate-50/50 cursor-pointer ${expandedId === incident.id ? "bg-slate-50" : ""}`}
+                      className={`hover:bg-muted/50 cursor-pointer ${expandedId === incident.id ? "bg-muted/50" : ""}`}
                       onClick={() => setExpandedId(expandedId === incident.id ? null : incident.id)}
                     >
                       <TableCell className="text-sm font-medium whitespace-nowrap">
                         {new Date(incident.date).toLocaleDateString("en-GB")}
                       </TableCell>
                       <TableCell>
-                        <div className="font-medium text-slate-800 text-sm">{incident.title}</div>
-                        <div className="text-xs text-slate-500 capitalize">{incident.type.replace(/_/g, " ")}</div>
+                        <div className="font-medium text-foreground text-sm">{incident.title}</div>
+                        <div className="text-xs text-muted-foreground capitalize">{incident.type.replace(/_/g, " ")}</div>
                       </TableCell>
                       <TableCell>{getSeverityBadge(incident.severity)}</TableCell>
-                      <TableCell className="hidden sm:table-cell text-sm text-slate-700">{(incident as any).childName || "—"}</TableCell>
+                      <TableCell className="hidden sm:table-cell text-sm text-foreground/80">{(incident as any).childName || "—"}</TableCell>
                       <TableCell className="hidden sm:table-cell">{getStatusBadge(incident.status)}</TableCell>
                       <TableCell className="hidden md:table-cell">
                         {incident.notificationRequired ? (
-                          <div className={`flex items-center gap-1.5 text-xs font-medium px-2 py-1 rounded w-fit border ${incident.notificationSent ? "bg-emerald-50 text-emerald-700 border-emerald-200" : "bg-amber-50 text-amber-700 border-amber-200"}`}>
+                          <div className={`flex items-center gap-1.5 text-xs font-medium px-2 py-1 rounded w-fit border ${
+                            incident.notificationSent
+                              ? "bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-700"
+                              : "bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 border-amber-200 dark:border-amber-700"
+                          }`}>
                             {incident.notificationSent ? <CheckCircle2 className="w-3 h-3" /> : <AlertTriangle className="w-3 h-3" />}
                             {incident.notificationSent ? "Sent" : "Required"}
                           </div>
                         ) : (
-                          <span className="text-xs text-slate-400">Not Required</span>
+                          <span className="text-xs text-muted-foreground">Not Required</span>
                         )}
                       </TableCell>
                       <TableCell className="text-right">
                         <Button variant="ghost" size="sm" className="h-7 w-7 p-0">
                           {expandedId === incident.id
-                            ? <ChevronUp className="w-4 h-4 text-slate-500" />
-                            : <ChevronDown className="w-4 h-4 text-slate-500" />}
+                            ? <ChevronUp className="w-4 h-4 text-muted-foreground" />
+                            : <ChevronDown className="w-4 h-4 text-muted-foreground" />}
                         </Button>
                       </TableCell>
                     </TableRow>
 
                     {expandedId === incident.id && (
-                      <TableRow className="bg-slate-50/80 hover:bg-slate-50/80">
+                      <TableRow className="bg-muted/40 hover:bg-muted/40">
                         <TableCell colSpan={7} className="px-6 pb-5 pt-2">
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                              <p className="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1.5">Description</p>
-                              <p className="text-sm text-slate-700">{incident.description}</p>
+                              <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1.5">Description</p>
+                              <p className="text-sm text-foreground/80">{incident.description}</p>
                             </div>
                             {incident.notificationRequired && (
-                              <div className={`rounded-lg p-3 border ${incident.notificationSent ? "bg-emerald-50 border-emerald-200" : "bg-amber-50 border-amber-200"}`}>
-                                <p className={`text-xs font-semibold uppercase tracking-wider mb-1.5 ${incident.notificationSent ? "text-emerald-700" : "text-amber-700"}`}>
+                              <div className={`rounded-lg p-3 border ${
+                                incident.notificationSent
+                                  ? "bg-emerald-50 dark:bg-emerald-900/20 border-emerald-200 dark:border-emerald-800"
+                                  : "bg-amber-50 dark:bg-amber-900/20 border-amber-200 dark:border-amber-800"
+                              }`}>
+                                <p className={`text-xs font-semibold uppercase tracking-wider mb-1.5 ${
+                                  incident.notificationSent
+                                    ? "text-emerald-700 dark:text-emerald-400"
+                                    : "text-amber-700 dark:text-amber-400"
+                                }`}>
                                   {incident.notificationSent ? "✓ Ofsted Notification Sent" : "⚠ Ofsted Notification Required"}
                                 </p>
-                                <p className="text-xs text-slate-600 mb-2">{incident.notificationReason}</p>
+                                <p className="text-xs text-foreground/70 mb-2">{incident.notificationReason}</p>
                                 {!incident.notificationSent && incident.notificationSuggestedWording && (
                                   <>
-                                    <p className="text-xs font-semibold text-slate-500 mb-1">Suggested wording:</p>
-                                    <p className="text-xs text-slate-500 italic leading-relaxed line-clamp-3">{incident.notificationSuggestedWording}</p>
+                                    <p className="text-xs font-semibold text-muted-foreground mb-1">Suggested wording:</p>
+                                    <p className="text-xs text-muted-foreground italic leading-relaxed line-clamp-3">{incident.notificationSuggestedWording}</p>
                                   </>
                                 )}
                               </div>
                             )}
                             {incident.followUpActions && (
                               <div className="md:col-span-2">
-                                <p className="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1.5">Follow-up Actions</p>
-                                <p className="text-sm text-slate-700">{incident.followUpActions}</p>
+                                <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1.5">Follow-up Actions</p>
+                                <p className="text-sm text-foreground/80">{incident.followUpActions}</p>
                               </div>
                             )}
                           </div>
@@ -159,7 +171,7 @@ export function Incidents() {
                 ))}
                 {(!incidents || incidents.length === 0) && (
                   <TableRow>
-                    <TableCell colSpan={7} className="h-32 text-center text-slate-500">
+                    <TableCell colSpan={7} className="h-32 text-center text-muted-foreground">
                       No incidents recorded.
                     </TableCell>
                   </TableRow>

@@ -28,9 +28,9 @@ export function Regulation() {
 
   const getActionStatusBadge = (status: RegulationActionStatus) => {
     switch(status) {
-      case 'outstanding': return <Badge variant="outline" className="border-amber-500 text-amber-700 bg-amber-50">Outstanding</Badge>;
-      case 'in_progress': return <Badge variant="outline" className="border-blue-500 text-blue-700 bg-blue-50">In Progress</Badge>;
-      case 'completed': return <Badge variant="outline" className="border-emerald-500 text-emerald-700 bg-emerald-50">Completed</Badge>;
+      case 'outstanding': return <Badge variant="outline" className="border-amber-500 text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/30 dark:border-amber-700">Outstanding</Badge>;
+      case 'in_progress': return <Badge variant="outline" className="border-blue-500 text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 dark:border-blue-700">In Progress</Badge>;
+      case 'completed': return <Badge variant="outline" className="border-emerald-500 text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/30 dark:border-emerald-700">Completed</Badge>;
       case 'escalated': return <Badge variant="destructive">Escalated</Badge>;
       default: return <Badge variant="outline">{status}</Badge>;
     }
@@ -58,7 +58,7 @@ export function Regulation() {
             </CardHeader>
             <CardContent className="p-0">
               <Table>
-                <TableHeader className="bg-slate-50">
+                <TableHeader className="bg-muted">
                   <TableRow>
                     <TableHead>Action</TableHead>
                     <TableHead className="hidden sm:table-cell">Source</TableHead>
@@ -72,13 +72,13 @@ export function Regulation() {
                   {actions?.map(action => (
                     <TableRow key={action.id}>
                       <TableCell>
-                        <div className="font-medium text-sm text-slate-800">{action.title}</div>
+                        <div className="font-medium text-sm text-foreground">{action.title}</div>
                         <div className="sm:hidden mt-1">{getActionStatusBadge(action.status)}</div>
                       </TableCell>
                       <TableCell className="hidden sm:table-cell">
                         <Badge variant="secondary" className="uppercase text-[10px] tracking-wider">{action.source}</Badge>
                       </TableCell>
-                      <TableCell className="hidden md:table-cell text-sm">{action.assignedTo || 'Unassigned'}</TableCell>
+                      <TableCell className="hidden md:table-cell text-sm text-muted-foreground">{action.assignedTo || 'Unassigned'}</TableCell>
                       <TableCell className="text-sm">
                         {action.dueDate ? (() => {
                           const daysOverdue = Math.floor((Date.now() - new Date(action.dueDate).getTime()) / (1000 * 60 * 60 * 24));
@@ -95,16 +95,16 @@ export function Regulation() {
                       <TableCell className="hidden sm:table-cell">{getActionStatusBadge(action.status)}</TableCell>
                       <TableCell className="hidden lg:table-cell">
                         {action.evidenceUploaded ? (
-                          <span className="flex items-center gap-1 text-xs font-medium text-emerald-600"><FileText className="w-3 h-3"/> Uploaded</span>
+                          <span className="flex items-center gap-1 text-xs font-medium text-emerald-600 dark:text-emerald-400"><FileText className="w-3 h-3"/> Uploaded</span>
                         ) : (
-                          <span className="flex items-center gap-1 text-xs font-medium text-amber-600"><AlertCircle className="w-3 h-3"/> Missing</span>
+                          <span className="flex items-center gap-1 text-xs font-medium text-amber-600 dark:text-amber-400"><AlertCircle className="w-3 h-3"/> Missing</span>
                         )}
                       </TableCell>
                     </TableRow>
                   ))}
                   {(!actions || actions.length === 0) && (
                     <TableRow>
-                      <TableCell colSpan={6} className="text-center p-8 text-slate-500">No outstanding actions found.</TableCell>
+                      <TableCell colSpan={6} className="text-center p-8 text-muted-foreground">No outstanding actions found.</TableCell>
                     </TableRow>
                   )}
                 </TableBody>
@@ -122,20 +122,20 @@ export function Regulation() {
                     <div className="flex justify-between items-start mb-4">
                       <div>
                         <div className="flex items-center gap-2 mb-1">
-                          <span className="font-semibold text-lg text-slate-800">Visit: {new Date(visit.visitDate).toLocaleDateString()}</span>
+                          <span className="font-semibold text-lg text-foreground">Visit: {new Date(visit.visitDate).toLocaleDateString()}</span>
                           {getFindingBadge(visit.overallFinding)}
                         </div>
-                        <p className="text-sm text-slate-500">Conducted by: <span className="font-medium text-slate-700">{visit.conductedBy}</span></p>
+                        <p className="text-sm text-muted-foreground">Conducted by: <span className="font-medium text-foreground/80">{visit.conductedBy}</span></p>
                       </div>
-                      <Badge variant="outline" className="bg-slate-50">Next due: {new Date(visit.nextDueDate).toLocaleDateString()}</Badge>
+                      <Badge variant="outline">Next due: {new Date(visit.nextDueDate).toLocaleDateString()}</Badge>
                     </div>
-                    <div className="bg-slate-50 p-4 rounded-md text-sm text-slate-700 border border-slate-100">
+                    <div className="bg-muted p-4 rounded-md text-sm text-foreground/80 border border-border">
                       {visit.summary}
                     </div>
                   </div>
                 ))}
                 {(!reg44 || reg44.length === 0) && (
-                  <div className="p-12 text-center text-slate-500">No Regulation 44 visits recorded.</div>
+                  <div className="p-12 text-center text-muted-foreground">No Regulation 44 visits recorded.</div>
                 )}
               </div>
             </CardContent>
@@ -146,7 +146,7 @@ export function Regulation() {
           <Card>
             <CardContent className="p-0">
               <Table>
-                <TableHeader className="bg-slate-50">
+                <TableHeader className="bg-muted">
                   <TableRow>
                     <TableHead>Review Date</TableHead>
                     <TableHead>Period</TableHead>
@@ -159,17 +159,17 @@ export function Regulation() {
                   {reg45?.map(review => (
                     <TableRow key={review.id}>
                       <TableCell className="font-medium">{new Date(review.reviewDate).toLocaleDateString()}</TableCell>
-                      <TableCell className="text-sm text-slate-600">{review.period}</TableCell>
+                      <TableCell className="text-sm text-muted-foreground">{review.period}</TableCell>
                       <TableCell>
                         <Badge variant="outline" className="capitalize">{review.qualityRating.replace('_', ' ')}</Badge>
                       </TableCell>
                       <TableCell className="text-sm">{review.completedBy}</TableCell>
-                      <TableCell className="text-sm font-medium text-amber-600">{review.actionsRaised}</TableCell>
+                      <TableCell className="text-sm font-medium text-amber-600 dark:text-amber-400">{review.actionsRaised}</TableCell>
                     </TableRow>
                   ))}
                   {(!reg45 || reg45.length === 0) && (
                     <TableRow>
-                      <TableCell colSpan={5} className="text-center p-8 text-slate-500">No Regulation 45 reviews recorded.</TableCell>
+                      <TableCell colSpan={5} className="text-center p-8 text-muted-foreground">No Regulation 45 reviews recorded.</TableCell>
                     </TableRow>
                   )}
                 </TableBody>

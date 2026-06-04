@@ -50,7 +50,7 @@ export function Dashboard() {
                 <p className="text-sm font-medium text-muted-foreground mb-1">{stat.title}</p>
                 <h3 className="text-3xl font-bold">{stat.value}</h3>
               </div>
-              <div className={`p-3 rounded-full bg-slate-100 ${stat.color}`}>
+              <div className={`p-3 rounded-full bg-muted ${stat.color}`}>
                 <stat.icon size={24} />
               </div>
             </CardContent>
@@ -68,7 +68,7 @@ export function Dashboard() {
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {summary.domains.map((domain) => (
-                  <div key={domain.domain} className="bg-slate-50 border p-4 rounded-lg flex flex-col gap-2 relative overflow-hidden">
+                  <div key={domain.domain} className="bg-muted border border-border p-4 rounded-lg flex flex-col gap-2 relative overflow-hidden">
                     {domain.riskLevel === DomainScoreRiskLevel.critical && (
                        <div className="absolute top-0 right-0 w-2 h-full bg-destructive"></div>
                     )}
@@ -76,16 +76,16 @@ export function Dashboard() {
                        <div className="absolute top-0 right-0 w-2 h-full bg-amber-500"></div>
                     )}
                     <div className="flex justify-between items-start">
-                      <span className="text-sm font-semibold text-slate-700 max-w-[70%]">{domain.label}</span>
+                      <span className="text-sm font-semibold text-foreground/90 max-w-[70%]">{domain.label}</span>
                       {domain.trend === 'up' && <ArrowUpRight className="text-emerald-500 w-4 h-4" />}
                       {domain.trend === 'down' && <ArrowDownRight className="text-destructive w-4 h-4" />}
-                      {domain.trend === 'stable' && <Minus className="text-slate-400 w-4 h-4" />}
+                      {domain.trend === 'stable' && <Minus className="text-muted-foreground w-4 h-4" />}
                     </div>
                     <div className="flex items-end gap-2 mt-2">
                       <span className="text-2xl font-bold">{domain.score}%</span>
                     </div>
                     {domain.alertCount > 0 && (
-                      <div className="flex items-center gap-1 mt-2 text-xs font-medium text-amber-600 bg-amber-50 px-2 py-1 rounded w-fit">
+                      <div className="flex items-center gap-1 mt-2 text-xs font-medium text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/30 px-2 py-1 rounded w-fit">
                         <AlertCircle className="w-3 h-3" />
                         {domain.alertCount} alerts
                       </div>
@@ -113,9 +113,9 @@ export function Dashboard() {
                       }`} />
                     </div>
                     <div>
-                      <p className="font-medium text-slate-800">{item.description}</p>
+                      <p className="font-medium text-foreground">{item.description}</p>
                       <div className="flex items-center gap-2 mt-1">
-                        <span className="text-slate-500 text-xs">{new Date(item.timestamp).toLocaleDateString()}</span>
+                        <span className="text-muted-foreground text-xs">{new Date(item.timestamp).toLocaleDateString()}</span>
                         <Badge variant="outline" className="text-[10px] uppercase">{item.domain}</Badge>
                       </div>
                     </div>

@@ -19,10 +19,10 @@ export function Governance() {
 
   const getStatusBadge = (status: string) => {
     switch(status) {
-      case 'open': return <Badge variant="outline" className="border-amber-500 text-amber-700 bg-amber-50">Open</Badge>;
-      case 'resolved': return <Badge variant="outline" className="border-emerald-500 text-emerald-700 bg-emerald-50">Resolved</Badge>;
+      case 'open': return <Badge variant="outline" className="border-amber-500 text-amber-700 bg-amber-50 dark:bg-amber-900/30 dark:text-amber-400 dark:border-amber-700">Open</Badge>;
+      case 'resolved': return <Badge variant="outline" className="border-emerald-500 text-emerald-700 bg-emerald-50 dark:bg-emerald-900/30 dark:text-emerald-400 dark:border-emerald-700">Resolved</Badge>;
       case 'investigating':
-      case 'under_investigation': return <Badge variant="outline" className="border-blue-500 text-blue-700 bg-blue-50">Under Investigation</Badge>;
+      case 'under_investigation': return <Badge variant="outline" className="border-blue-500 text-blue-700 bg-blue-50 dark:bg-blue-900/30 dark:text-blue-400 dark:border-blue-700">Under Investigation</Badge>;
       case 'current': return <Badge className="bg-emerald-500">Current</Badge>;
       case 'overdue': return <Badge variant="destructive">Overdue</Badge>;
       case 'due_for_review': return <Badge className="bg-amber-500 hover:bg-amber-600">Due for Review</Badge>;
@@ -41,35 +41,35 @@ export function Governance() {
 
       {summary && (
         <div className="grid grid-cols-3 gap-3 sm:gap-4">
-          <Card className="bg-slate-50 border-slate-200">
+          <Card>
              <CardContent className="p-4 flex items-center justify-between">
                <div>
-                 <p className="text-sm font-medium text-slate-500 uppercase tracking-wider mb-1">Open Complaints</p>
-                 <h3 className="text-3xl font-bold text-slate-800">{summary.openComplaints}</h3>
+                 <p className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-1">Open Complaints</p>
+                 <h3 className="text-3xl font-bold text-foreground">{summary.openComplaints}</h3>
                </div>
-               <div className="p-3 rounded-full bg-rose-100 text-rose-600">
+               <div className="p-3 rounded-full bg-rose-100 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400">
                  <MessageSquare size={24} />
                </div>
              </CardContent>
            </Card>
-           <Card className="bg-slate-50 border-slate-200">
+           <Card>
              <CardContent className="p-4 flex items-center justify-between">
                <div>
-                 <p className="text-sm font-medium text-slate-500 uppercase tracking-wider mb-1">Pending Notifications</p>
-                 <h3 className="text-3xl font-bold text-slate-800">{summary.pendingNotifications}</h3>
+                 <p className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-1">Pending Notifications</p>
+                 <h3 className="text-3xl font-bold text-foreground">{summary.pendingNotifications}</h3>
                </div>
-               <div className="p-3 rounded-full bg-amber-100 text-amber-600">
+               <div className="p-3 rounded-full bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400">
                  <BellRing size={24} />
                </div>
              </CardContent>
            </Card>
-           <Card className="bg-slate-50 border-slate-200">
+           <Card>
              <CardContent className="p-4 flex items-center justify-between">
                <div>
-                 <p className="text-sm font-medium text-slate-500 uppercase tracking-wider mb-1">Policies to Review</p>
-                 <h3 className="text-3xl font-bold text-slate-800">{summary.policiesOverdue ?? 0}</h3>
+                 <p className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-1">Policies to Review</p>
+                 <h3 className="text-3xl font-bold text-foreground">{summary.policiesOverdue ?? 0}</h3>
                </div>
-               <div className="p-3 rounded-full bg-blue-100 text-blue-600">
+               <div className="p-3 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400">
                  <FileText size={24} />
                </div>
              </CardContent>
@@ -89,7 +89,7 @@ export function Governance() {
             <CardContent className="p-0">
               <div className="overflow-x-auto">
               <Table>
-                <TableHeader className="bg-slate-50">
+                <TableHeader className="bg-muted">
                   <TableRow>
                     <TableHead className="w-[90px]">Date</TableHead>
                     <TableHead>Type</TableHead>
@@ -113,14 +113,14 @@ export function Governance() {
                       <TableCell className="hidden sm:table-cell text-sm">{c.raisedBy}</TableCell>
                       <TableCell className="whitespace-nowrap">
                         {c.type === 'compliment'
-                          ? <Badge variant="outline" className="border-emerald-500 text-emerald-700 bg-emerald-50">Received</Badge>
+                          ? <Badge variant="outline" className="border-emerald-500 text-emerald-700 bg-emerald-50 dark:bg-emerald-900/30 dark:text-emerald-400 dark:border-emerald-700">Received</Badge>
                           : getStatusBadge(c.status)}
                       </TableCell>
                     </TableRow>
                   ))}
                   {(!complaints || complaints.length === 0) && (
                     <TableRow>
-                      <TableCell colSpan={5} className="text-center p-8 text-slate-500">No complaints or compliments found.</TableCell>
+                      <TableCell colSpan={5} className="text-center p-8 text-muted-foreground">No complaints or compliments found.</TableCell>
                     </TableRow>
                   )}
                 </TableBody>
@@ -134,7 +134,7 @@ export function Governance() {
            <Card>
             <CardContent className="p-0">
               <Table>
-                <TableHeader className="bg-slate-50">
+                <TableHeader className="bg-muted">
                   <TableRow>
                     <TableHead>Date</TableHead>
                     <TableHead>Type</TableHead>
@@ -148,7 +148,7 @@ export function Governance() {
                     <TableRow key={n.id}>
                       <TableCell className="text-sm whitespace-nowrap">{new Date(n.date).toLocaleDateString()}</TableCell>
                       <TableCell>
-                         <Badge variant="outline" className="capitalize text-[10px] bg-slate-50">
+                         <Badge variant="outline" className="capitalize text-[10px]">
                            {n.type.replace(/_/g, ' ')}
                          </Badge>
                       </TableCell>
@@ -157,17 +157,17 @@ export function Governance() {
                       </TableCell>
                       <TableCell>
                         {n.sent ? (
-                          <span className="flex items-center gap-1 text-xs font-medium text-emerald-600"><CheckCircle className="w-3 h-3"/> Sent</span>
+                          <span className="flex items-center gap-1 text-xs font-medium text-emerald-600 dark:text-emerald-400"><CheckCircle className="w-3 h-3"/> Sent</span>
                         ) : (
-                          <span className="flex items-center gap-1 text-xs font-medium text-amber-600"><AlertTriangle className="w-3 h-3"/> Pending</span>
+                          <span className="flex items-center gap-1 text-xs font-medium text-amber-600 dark:text-amber-400"><AlertTriangle className="w-3 h-3"/> Pending</span>
                         )}
                       </TableCell>
-                      <TableCell className="text-xs font-mono text-slate-500">{n.reference || '-'}</TableCell>
+                      <TableCell className="text-xs font-mono text-muted-foreground">{n.reference || '-'}</TableCell>
                     </TableRow>
                   ))}
                   {(!notifications || notifications.length === 0) && (
                     <TableRow>
-                      <TableCell colSpan={5} className="text-center p-8 text-slate-500">No notifications found.</TableCell>
+                      <TableCell colSpan={5} className="text-center p-8 text-muted-foreground">No notifications found.</TableCell>
                     </TableRow>
                   )}
                 </TableBody>
@@ -180,7 +180,7 @@ export function Governance() {
            <Card>
             <CardContent className="p-0">
               <Table>
-                <TableHeader className="bg-slate-50">
+                <TableHeader className="bg-muted">
                   <TableRow>
                     <TableHead>Policy Title</TableHead>
                     <TableHead>Category</TableHead>
@@ -192,11 +192,11 @@ export function Governance() {
                 <TableBody>
                   {policies?.map(p => (
                     <TableRow key={p.id}>
-                      <TableCell className="font-medium text-slate-800">{p.title}</TableCell>
+                      <TableCell className="font-medium text-foreground">{p.title}</TableCell>
                       <TableCell>
                         <Badge variant="secondary" className="capitalize text-[10px]">{p.category.replace(/_/g, ' ')}</Badge>
                       </TableCell>
-                      <TableCell className="text-sm text-slate-500">v{p.version}</TableCell>
+                      <TableCell className="text-sm text-muted-foreground">v{p.version}</TableCell>
                       <TableCell className="text-sm font-medium">
                         {p.nextReviewDate ? new Date(p.nextReviewDate).toLocaleDateString() : '-'}
                       </TableCell>
@@ -205,7 +205,7 @@ export function Governance() {
                   ))}
                   {(!policies || policies.length === 0) && (
                     <TableRow>
-                      <TableCell colSpan={5} className="text-center p-8 text-slate-500">No policies found.</TableCell>
+                      <TableCell colSpan={5} className="text-center p-8 text-muted-foreground">No policies found.</TableCell>
                     </TableRow>
                   )}
                 </TableBody>
