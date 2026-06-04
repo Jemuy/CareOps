@@ -7,8 +7,9 @@ import { Button } from "@/components/ui/button";
 import { Download, SearchCheck, CheckCircle2, AlertTriangle, ShieldAlert, FileText, ClipboardList } from "lucide-react";
 
 export function Inspection() {
-  const { data: pack, isLoading: loadingPack } = useGetInspectionPack();
+  const { data: pack, isLoading: loadingPack, dataUpdatedAt } = useGetInspectionPack();
   const { data: annex, isLoading: loadingAnnex } = useGetAnnexA();
+  const refreshedAt = dataUpdatedAt ? new Date(dataUpdatedAt) : new Date();
 
   if (loadingPack || loadingAnnex) {
     return <div className="space-y-6"><Skeleton className="h-10 w-64" /><Skeleton className="h-32 w-full" /><Skeleton className="h-[400px]" /></div>;
@@ -29,6 +30,9 @@ export function Inspection() {
             <h1 className="text-3xl font-bold tracking-tight">Inspection War-Room</h1>
           </div>
           <p className="text-muted-foreground mt-1 max-w-2xl">One-click, comprehensive view of your entire compliance position, designed to be presented directly to an inspector.</p>
+          <p className="text-xs text-slate-400 mt-2">
+            Data refreshed: {refreshedAt.toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short' })}
+          </p>
         </div>
         <div className="flex gap-3">
           <Button variant="outline" className="border-primary text-primary">

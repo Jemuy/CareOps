@@ -5,12 +5,14 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { AlertTriangle, ChevronDown, ChevronUp, CheckCircle2, ClipboardList } from "lucide-react";
+import { AlertTriangle, ChevronDown, ChevronUp, CheckCircle2, ClipboardList, Plus } from "lucide-react";
 import { IncidentSeverity, IncidentStatus } from "@workspace/api-client-react";
+import { LogIncidentModal } from "@/components/modals/LogIncidentModal";
 
 export function Incidents() {
   const { data: incidents, isLoading } = useListIncidents();
   const [expandedId, setExpandedId] = useState<number | null>(null);
+  const [showLog, setShowLog] = useState(false);
 
   if (isLoading) {
     return (
@@ -50,7 +52,7 @@ export function Incidents() {
           <h1 className="text-3xl font-bold tracking-tight">Incident Log</h1>
           <p className="text-muted-foreground mt-1">Record, track, and review incidents involving young people.</p>
         </div>
-        <div className="flex gap-3">
+        <div className="flex items-center gap-3">
           {notificationPending > 0 && (
             <div className="flex items-center gap-2 bg-amber-50 border border-amber-200 text-amber-700 text-sm font-medium px-3 py-2 rounded-lg">
               <AlertTriangle className="w-4 h-4" />
@@ -63,6 +65,10 @@ export function Incidents() {
               {openCount} open
             </div>
           )}
+          <Button onClick={() => setShowLog(true)} className="bg-primary text-primary-foreground hover:bg-primary/90 shrink-0">
+            <Plus className="mr-2 h-4 w-4" />
+            Log Incident
+          </Button>
         </div>
       </div>
 
@@ -163,6 +169,8 @@ export function Incidents() {
           </div>
         </CardContent>
       </Card>
+
+      <LogIncidentModal open={showLog} onClose={() => setShowLog(false)} />
     </div>
   );
 }

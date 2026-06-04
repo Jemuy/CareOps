@@ -110,7 +110,11 @@ export function Governance() {
                         <div className="line-clamp-2">{c.description}</div>
                       </TableCell>
                       <TableCell className="text-sm">{c.raisedBy}</TableCell>
-                      <TableCell>{getStatusBadge(c.status)}</TableCell>
+                      <TableCell>
+                        {c.type === 'compliment'
+                          ? <Badge variant="outline" className="border-emerald-500 text-emerald-700 bg-emerald-50">Received</Badge>
+                          : getStatusBadge(c.status)}
+                      </TableCell>
                     </TableRow>
                   ))}
                   {(!complaints || complaints.length === 0) && (

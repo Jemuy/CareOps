@@ -1,15 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "wouter";
 import { useListSafeguardingEvents, useListMissingEpisodes } from "@workspace/api-client-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ShieldAlert, AlertCircle, CheckCircle, FileText, MapPin, Clock, ChevronRight } from "lucide-react";
+import { ShieldAlert, AlertCircle, CheckCircle, FileText, MapPin, Clock, ChevronRight, Plus } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { LogSafeguardingModal } from "@/components/modals/LogSafeguardingModal";
 
 export function Safeguarding() {
   const { data: events, isLoading: loadingEvents } = useListSafeguardingEvents();
   const { data: missing, isLoading: loadingMissing } = useListMissingEpisodes();
+  const [showLog, setShowLog] = useState(false);
 
   const isLoading = loadingEvents || loadingMissing;
 
@@ -81,11 +84,15 @@ export function Safeguarding() {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-start">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h1 className="text-3xl font-bold tracking-tight text-foreground">Safeguarding Log</h1>
           <p className="text-muted-foreground mt-1">Track and manage all safeguarding events, CP concerns, and missing episodes.</p>
         </div>
+        <Button onClick={() => setShowLog(true)} className="shrink-0 bg-primary text-primary-foreground hover:bg-primary/90">
+          <Plus className="mr-2 h-4 w-4" />
+          Record Event
+        </Button>
       </div>
 
       <div className="grid grid-cols-3 gap-4">
@@ -264,6 +271,8 @@ export function Safeguarding() {
           </Card>
         </TabsContent>
       </Tabs>
+
+      <LogSafeguardingModal open={showLog} onClose={() => setShowLog(false)} />
     </div>
   );
 }

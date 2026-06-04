@@ -79,7 +79,17 @@ export function Regulation() {
                       </TableCell>
                       <TableCell className="text-sm">{action.assignedTo || 'Unassigned'}</TableCell>
                       <TableCell className="text-sm">
-                         {action.dueDate ? new Date(action.dueDate).toLocaleDateString() : 'None'}
+                        {action.dueDate ? (() => {
+                          const daysOverdue = Math.floor((Date.now() - new Date(action.dueDate).getTime()) / (1000 * 60 * 60 * 24));
+                          return (
+                            <div>
+                              <span className={daysOverdue > 0 ? "text-destructive font-medium" : ""}>{new Date(action.dueDate).toLocaleDateString('en-GB')}</span>
+                              {daysOverdue > 0 && action.status !== 'completed' && (
+                                <div className="text-[10px] font-semibold text-destructive mt-0.5">{daysOverdue}d overdue</div>
+                              )}
+                            </div>
+                          );
+                        })() : 'None'}
                       </TableCell>
                       <TableCell>{getActionStatusBadge(action.status)}</TableCell>
                       <TableCell>
