@@ -1,5 +1,6 @@
 import React from "react";
 import { Link, useLocation } from "wouter";
+import { useTheme } from "@/lib/theme-context";
 import { useGetDashboardSummary } from "@workspace/api-client-react";
 import {
   LayoutDashboard,
@@ -13,6 +14,8 @@ import {
   Building2,
   SearchCheck,
   Loader2,
+  Sun,
+  Moon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
@@ -24,6 +27,7 @@ interface SidebarContentProps {
 export function SidebarContent({ onNavigate }: SidebarContentProps) {
   const [location] = useLocation();
   const { data: summary, isLoading } = useGetDashboardSummary();
+  const { theme, setTheme } = useTheme();
 
   const navGroups = [
     {
@@ -130,8 +134,16 @@ export function SidebarContent({ onNavigate }: SidebarContentProps) {
         ))}
       </nav>
 
-      <div className="p-4 border-t border-sidebar-border text-xs text-sidebar-foreground/50 text-center">
-        v0.1.0 • Connected
+      <div className="p-4 border-t border-sidebar-border flex items-center justify-between">
+        <span className="text-xs text-sidebar-foreground/50">v0.1.0 • Connected</span>
+        <button
+          onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+          className="flex items-center gap-1.5 text-xs text-sidebar-foreground/60 hover:text-sidebar-foreground px-2.5 py-1.5 rounded-md hover:bg-sidebar-accent transition-colors"
+          aria-label="Toggle dark mode"
+        >
+          {theme === "dark" ? <Sun size={14} /> : <Moon size={14} />}
+          {theme === "dark" ? "Light" : "Dark"}
+        </button>
       </div>
     </div>
   );
