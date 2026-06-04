@@ -60,12 +60,12 @@ export function Regulation() {
               <Table>
                 <TableHeader className="bg-slate-50">
                   <TableRow>
-                    <TableHead className="w-[300px]">Action</TableHead>
-                    <TableHead>Source</TableHead>
-                    <TableHead>Assigned To</TableHead>
+                    <TableHead>Action</TableHead>
+                    <TableHead className="hidden sm:table-cell">Source</TableHead>
+                    <TableHead className="hidden md:table-cell">Assigned To</TableHead>
                     <TableHead>Due Date</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Evidence</TableHead>
+                    <TableHead className="hidden sm:table-cell">Status</TableHead>
+                    <TableHead className="hidden lg:table-cell">Evidence</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -73,11 +73,12 @@ export function Regulation() {
                     <TableRow key={action.id}>
                       <TableCell>
                         <div className="font-medium text-sm text-slate-800">{action.title}</div>
+                        <div className="sm:hidden mt-1">{getActionStatusBadge(action.status)}</div>
                       </TableCell>
-                      <TableCell>
+                      <TableCell className="hidden sm:table-cell">
                         <Badge variant="secondary" className="uppercase text-[10px] tracking-wider">{action.source}</Badge>
                       </TableCell>
-                      <TableCell className="text-sm">{action.assignedTo || 'Unassigned'}</TableCell>
+                      <TableCell className="hidden md:table-cell text-sm">{action.assignedTo || 'Unassigned'}</TableCell>
                       <TableCell className="text-sm">
                         {action.dueDate ? (() => {
                           const daysOverdue = Math.floor((Date.now() - new Date(action.dueDate).getTime()) / (1000 * 60 * 60 * 24));
@@ -91,8 +92,8 @@ export function Regulation() {
                           );
                         })() : 'None'}
                       </TableCell>
-                      <TableCell>{getActionStatusBadge(action.status)}</TableCell>
-                      <TableCell>
+                      <TableCell className="hidden sm:table-cell">{getActionStatusBadge(action.status)}</TableCell>
+                      <TableCell className="hidden lg:table-cell">
                         {action.evidenceUploaded ? (
                           <span className="flex items-center gap-1 text-xs font-medium text-emerald-600"><FileText className="w-3 h-3"/> Uploaded</span>
                         ) : (

@@ -40,7 +40,7 @@ export function Governance() {
       </div>
 
       {summary && (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-3 gap-3 sm:gap-4">
           <Card className="bg-slate-50 border-slate-200">
              <CardContent className="p-4 flex items-center justify-between">
                <div>
@@ -87,30 +87,31 @@ export function Governance() {
         <TabsContent value="complaints">
           <Card>
             <CardContent className="p-0">
+              <div className="overflow-x-auto">
               <Table>
                 <TableHeader className="bg-slate-50">
                   <TableRow>
-                    <TableHead>Date</TableHead>
+                    <TableHead className="w-[90px]">Date</TableHead>
                     <TableHead>Type</TableHead>
-                    <TableHead className="w-[300px]">Description</TableHead>
-                    <TableHead>Raised By</TableHead>
+                    <TableHead>Description</TableHead>
+                    <TableHead className="hidden sm:table-cell">Raised By</TableHead>
                     <TableHead>Status</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {complaints?.map(c => (
                     <TableRow key={c.id}>
-                      <TableCell className="text-sm whitespace-nowrap">{new Date(c.date).toLocaleDateString()}</TableCell>
+                      <TableCell className="text-sm whitespace-nowrap">{new Date(c.date).toLocaleDateString('en-GB')}</TableCell>
                       <TableCell>
                          <Badge variant={c.type === 'complaint' ? 'destructive' : 'secondary'} className="capitalize">
                            {c.type}
                          </Badge>
                       </TableCell>
-                      <TableCell className="text-sm">
+                      <TableCell className="text-sm max-w-[150px] sm:max-w-none">
                         <div className="line-clamp-2">{c.description}</div>
                       </TableCell>
-                      <TableCell className="text-sm">{c.raisedBy}</TableCell>
-                      <TableCell>
+                      <TableCell className="hidden sm:table-cell text-sm">{c.raisedBy}</TableCell>
+                      <TableCell className="whitespace-nowrap">
                         {c.type === 'compliment'
                           ? <Badge variant="outline" className="border-emerald-500 text-emerald-700 bg-emerald-50">Received</Badge>
                           : getStatusBadge(c.status)}
@@ -124,6 +125,7 @@ export function Governance() {
                   )}
                 </TableBody>
               </Table>
+              </div>
             </CardContent>
           </Card>
         </TabsContent>

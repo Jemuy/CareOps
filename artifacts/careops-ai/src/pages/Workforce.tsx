@@ -129,12 +129,12 @@ export function Workforce() {
               <Table>
                 <TableHeader className="bg-slate-50">
                   <TableRow>
-                    <TableHead className="w-[250px]">Name</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Role</TableHead>
-                    <TableHead>Compliance Score</TableHead>
+                    <TableHead className="w-[200px]">Name</TableHead>
+                    <TableHead className="hidden sm:table-cell">Status</TableHead>
+                    <TableHead className="hidden md:table-cell">Role</TableHead>
+                    <TableHead className="hidden lg:table-cell">Compliance Score</TableHead>
                     <TableHead>DBS Status</TableHead>
-                    <TableHead>Mandatory Training</TableHead>
+                    <TableHead className="hidden sm:table-cell">Mandatory Training</TableHead>
                     <TableHead className="text-right">Action</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -170,9 +170,9 @@ export function Workforce() {
                             </div>
                           </div>
                         </TableCell>
-                        <TableCell>{getStatusBadge(member.status)}</TableCell>
-                        <TableCell className="text-slate-600 text-sm">{member.role}</TableCell>
-                        <TableCell>
+                        <TableCell className="hidden sm:table-cell">{getStatusBadge(member.status)}</TableCell>
+                        <TableCell className="hidden md:table-cell text-slate-600 text-sm">{member.role}</TableCell>
+                        <TableCell className="hidden lg:table-cell">
                           <div className="flex items-center gap-2">
                             <div className="w-full bg-slate-200 rounded-full h-2 max-w-[100px]">
                               <div
@@ -191,7 +191,7 @@ export function Workforce() {
                             </div>
                           )}
                         </TableCell>
-                        <TableCell>
+                        <TableCell className="hidden sm:table-cell">
                           {member.mandatoryTrainingComplete ? (
                             <Badge variant="outline" className="border-emerald-500 text-emerald-700 bg-emerald-50">Complete</Badge>
                           ) : (

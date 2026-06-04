@@ -78,13 +78,13 @@ export function Incidents() {
             <Table>
               <TableHeader className="bg-slate-50">
                 <TableRow>
-                  <TableHead className="w-[100px]">Date</TableHead>
+                  <TableHead className="w-[90px]">Date</TableHead>
                   <TableHead>Type</TableHead>
                   <TableHead>Severity</TableHead>
-                  <TableHead>Child</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Notification</TableHead>
-                  <TableHead className="text-right w-[80px]">Details</TableHead>
+                  <TableHead className="hidden sm:table-cell">Child</TableHead>
+                  <TableHead className="hidden sm:table-cell">Status</TableHead>
+                  <TableHead className="hidden md:table-cell">Notification</TableHead>
+                  <TableHead className="text-right w-[60px]">Details</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -102,9 +102,9 @@ export function Incidents() {
                         <div className="text-xs text-slate-500 capitalize">{incident.type.replace(/_/g, " ")}</div>
                       </TableCell>
                       <TableCell>{getSeverityBadge(incident.severity)}</TableCell>
-                      <TableCell className="text-sm text-slate-700">{(incident as any).childName || "—"}</TableCell>
-                      <TableCell>{getStatusBadge(incident.status)}</TableCell>
-                      <TableCell>
+                      <TableCell className="hidden sm:table-cell text-sm text-slate-700">{(incident as any).childName || "—"}</TableCell>
+                      <TableCell className="hidden sm:table-cell">{getStatusBadge(incident.status)}</TableCell>
+                      <TableCell className="hidden md:table-cell">
                         {incident.notificationRequired ? (
                           <div className={`flex items-center gap-1.5 text-xs font-medium px-2 py-1 rounded w-fit border ${incident.notificationSent ? "bg-emerald-50 text-emerald-700 border-emerald-200" : "bg-amber-50 text-amber-700 border-amber-200"}`}>
                             {incident.notificationSent ? <CheckCircle2 className="w-3 h-3" /> : <AlertTriangle className="w-3 h-3" />}

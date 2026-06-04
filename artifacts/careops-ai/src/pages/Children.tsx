@@ -71,11 +71,11 @@ export function ChildrenList() {
               <Table>
                 <TableHeader className="bg-slate-50/50">
                   <TableRow>
-                    <TableHead className="w-[250px]">Name</TableHead>
+                    <TableHead className="w-[200px]">Name</TableHead>
                     <TableHead>Status</TableHead>
                     <TableHead>Risk Level</TableHead>
-                    <TableHead>Key Worker</TableHead>
-                    <TableHead>Admission Date</TableHead>
+                    <TableHead className="hidden sm:table-cell">Key Worker</TableHead>
+                    <TableHead className="hidden md:table-cell">Admission Date</TableHead>
                     <TableHead className="text-right">Action</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -99,13 +99,13 @@ export function ChildrenList() {
                       </TableCell>
                       <TableCell>{getStatusBadge(child.status)}</TableCell>
                       <TableCell>{getRiskBadge(child.riskLevel)}</TableCell>
-                      <TableCell>
+                      <TableCell className="hidden sm:table-cell">
                         <span className="text-sm">{child.keyWorker}</span>
                         {child.lastKeyWorkDate && (
                           <span className="block text-xs text-slate-500 mt-0.5">Last seen: {new Date(child.lastKeyWorkDate).toLocaleDateString("en-GB")}</span>
                         )}
                       </TableCell>
-                      <TableCell className="text-sm text-slate-600">
+                      <TableCell className="hidden md:table-cell text-sm text-slate-600">
                         {new Date(child.admissionDate).toLocaleDateString("en-GB")}
                       </TableCell>
                       <TableCell className="text-right">
