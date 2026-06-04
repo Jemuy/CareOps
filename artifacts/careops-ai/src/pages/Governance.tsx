@@ -21,11 +21,14 @@ export function Governance() {
     switch(status) {
       case 'open': return <Badge variant="outline" className="border-amber-500 text-amber-700 bg-amber-50">Open</Badge>;
       case 'resolved': return <Badge variant="outline" className="border-emerald-500 text-emerald-700 bg-emerald-50">Resolved</Badge>;
-      case 'investigating': return <Badge variant="outline" className="border-blue-500 text-blue-700 bg-blue-50">Investigating</Badge>;
+      case 'investigating':
+      case 'under_investigation': return <Badge variant="outline" className="border-blue-500 text-blue-700 bg-blue-50">Under Investigation</Badge>;
       case 'current': return <Badge className="bg-emerald-500">Current</Badge>;
+      case 'overdue': return <Badge variant="destructive">Overdue</Badge>;
+      case 'due_for_review': return <Badge className="bg-amber-500 hover:bg-amber-600">Due for Review</Badge>;
       case 'needs_review': return <Badge className="bg-amber-500">Needs Review</Badge>;
       case 'expired': return <Badge variant="destructive">Expired</Badge>;
-      default: return <Badge variant="secondary" className="capitalize">{status.replace('_', ' ')}</Badge>;
+      default: return <Badge variant="secondary" className="capitalize">{status.replace(/_/g, ' ')}</Badge>;
     }
   };
 
@@ -64,7 +67,7 @@ export function Governance() {
              <CardContent className="p-4 flex items-center justify-between">
                <div>
                  <p className="text-sm font-medium text-slate-500 uppercase tracking-wider mb-1">Policies to Review</p>
-                 <h3 className="text-3xl font-bold text-slate-800">{summary.policiesToReview}</h3>
+                 <h3 className="text-3xl font-bold text-slate-800">{summary.policiesOverdue ?? 0}</h3>
                </div>
                <div className="p-3 rounded-full bg-blue-100 text-blue-600">
                  <FileText size={24} />

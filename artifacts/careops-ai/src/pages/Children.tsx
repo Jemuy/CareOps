@@ -82,7 +82,9 @@ export function ChildrenList() {
                           <div>
                             {child.firstName} {child.lastName}
                             {child.childVoiceScore !== undefined && child.childVoiceScore !== null && (
-                              <div className="text-[10px] text-slate-500 mt-0.5">Voice Score: {child.childVoiceScore}/10</div>
+                              <div className={`text-[10px] mt-0.5 font-medium ${child.childVoiceScore === 0 ? 'text-rose-500' : child.childVoiceScore < 50 ? 'text-amber-500' : 'text-emerald-600'}`}>
+                                Voice: {child.childVoiceScore}%
+                              </div>
                             )}
                           </div>
                         </div>
